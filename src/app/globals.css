@@ -1,0 +1,359 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Font imports */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Dark industrial theme — single mode, no light variant */
+  --surface: #0a0e14;
+  --surface-secondary: #111820;
+  --surface-tertiary: #1a2332;
+  --ink: #e2e8f0;
+  --ink-secondary: #c8d0db;
+  --ink-tertiary: #94a3b8;
+  --ink-muted: #64748b;
+  --accent: #3b82f6;
+  --accent-hover: #60a5fa;
+  --accent-muted: rgba(59, 130, 246, 0.15);
+}
+
+@layer base {
+  body {
+    background: linear-gradient(180deg, #0a0e14 0%, #111820 100%);
+    min-height: 100vh;
+    font-family: var(--font-sans), system-ui, sans-serif;
+    overflow-x: hidden;
+  }
+
+  code, pre {
+    font-family: var(--font-mono), monospace;
+  }
+}
+
+/* Subtle grid overlay */
+.grid-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Glassmorphism utility */
+.glass {
+  backdrop-filter: blur(12px);
+  background: rgba(10, 14, 20, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Chat container */
+.chat-container {
+  @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* User message bubble */
+.message-user {
+  background: linear-gradient(135deg, #1e40af, #2563eb);
+  border-radius: 14px 14px 4px 14px;
+  color: white;
+}
+
+/* Assistant message bubble */
+.message-assistant {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px 14px 14px 4px;
+}
+
+/* Chat input */
+.chat-input {
+  @apply w-full px-5 py-4 rounded-2xl text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 transition-all duration-200;
+  background: rgba(17, 24, 32, 0.9);
+  border: 1px solid rgba(100, 116, 139, 0.3);
+}
+
+.chat-input:focus {
+  --tw-ring-color: rgba(59, 130, 246, 0.5);
+  border-color: var(--accent);
+}
+
+/* Markdown prose styling */
+.prose-chat {
+  @apply text-ink leading-relaxed;
+}
+
+.prose-chat p {
+  @apply mb-4 last:mb-0;
+}
+
+.prose-chat strong {
+  @apply font-semibold text-accent-hover;
+}
+
+.prose-chat em {
+  @apply italic text-ink-secondary;
+}
+
+.prose-chat code {
+  @apply px-1.5 py-0.5 rounded text-sm font-mono;
+  background: rgba(26, 35, 50, 0.8);
+  color: #93c5fd;
+}
+
+.prose-chat pre {
+  @apply p-4 rounded-xl overflow-x-auto my-4;
+  background: rgba(26, 35, 50, 0.8);
+}
+
+.prose-chat pre code {
+  @apply bg-transparent p-0;
+  color: #e2e8f0;
+}
+
+.prose-chat ul, .prose-chat ol {
+  @apply my-4 ml-6;
+}
+
+.prose-chat ul {
+  @apply list-disc;
+}
+
+.prose-chat ol {
+  @apply list-decimal;
+}
+
+.prose-chat li {
+  @apply mb-2;
+}
+
+.prose-chat blockquote {
+  @apply pl-4 border-l-2 border-accent italic text-ink-secondary my-4;
+}
+
+.prose-chat a {
+  @apply text-accent hover:text-accent-hover underline underline-offset-2;
+}
+
+.prose-chat h1, .prose-chat h2, .prose-chat h3 {
+  @apply font-sans font-medium mt-6 mb-3;
+}
+
+.prose-chat h1 {
+  @apply text-2xl text-ink;
+}
+
+.prose-chat h2 {
+  @apply text-xl text-accent-hover;
+}
+
+.prose-chat h3 {
+  @apply text-lg text-ink;
+}
+
+/* Tables in markdown */
+.prose-chat table {
+  @apply w-full my-4 text-sm;
+  border-collapse: collapse;
+}
+
+.prose-chat th {
+  @apply px-3 py-2 text-left font-semibold text-accent-hover;
+  background: rgba(26, 35, 50, 0.6);
+  border-bottom: 1px solid rgba(100, 116, 139, 0.3);
+}
+
+.prose-chat td {
+  @apply px-3 py-2;
+  border-bottom: 1px solid rgba(100, 116, 139, 0.15);
+}
+
+.prose-chat tr:nth-child(even) td {
+  background: rgba(17, 24, 32, 0.4);
+}
+
+/* Suggested question chips */
+.suggestion-chip {
+  @apply px-4 py-2.5 rounded-xl text-sm text-ink-secondary transition-all duration-200 cursor-pointer;
+  background: rgba(17, 24, 32, 0.6);
+  border: 1px solid rgba(100, 116, 139, 0.2);
+}
+
+.suggestion-chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(59, 130, 246, 0.08);
+}
+
+/* Hero chat panel */
+.hero-chat-panel {
+  backdrop-filter: blur(16px);
+  background: rgba(17, 24, 32, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+}
+
+/* View specs trigger button */
+.specs-trigger {
+  background: rgba(17, 24, 32, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.specs-trigger:hover {
+  background: rgba(17, 24, 32, 0.7);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+/* Bottom pane */
+.bottom-pane {
+  backdrop-filter: blur(24px) saturate(1.2);
+  background: rgba(10, 14, 20, 0.92);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Specs table styling */
+.specs-table {
+  border-collapse: collapse;
+}
+
+.specs-table th {
+  @apply px-4 py-2.5 text-xs font-mono text-ink-muted uppercase tracking-wider;
+  background: rgba(26, 35, 50, 0.4);
+  border-bottom: 1px solid rgba(100, 116, 139, 0.2);
+}
+
+.specs-table td {
+  @apply px-4 py-2.5 text-sm text-ink-secondary;
+  border-bottom: 1px solid rgba(100, 116, 139, 0.08);
+}
+
+.specs-table tbody tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* Glassmorphism sidebar */
+.sidebar-glass {
+  backdrop-filter: blur(20px) saturate(1.3);
+  background: rgba(10, 14, 20, 0.75);
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.sidebar-edge-glow {
+  background: linear-gradient(
+    180deg,
+    rgba(59, 130, 246, 0.4) 0%,
+    rgba(59, 130, 246, 0.08) 40%,
+    transparent 70%
+  );
+}
+
+/* Sidebar nav items */
+.sidebar-nav-item {
+  position: relative;
+}
+
+.sidebar-nav-active {
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.sidebar-nav-active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 25%;
+  bottom: 25%;
+  width: 2px;
+  border-radius: 1px;
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+}
+
+/* Sidebar document items */
+.sidebar-doc-item {
+  cursor: default;
+}
+
+.sidebar-doc-item:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.5);
+}
+
+/* Hide scrollbar */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Typing indicator dots */
+.typing-dot {
+  @apply w-2 h-2 rounded-full;
+  background: var(--ink-tertiary);
+  animation: pulseDot 1.4s ease-in-out infinite;
+}
+
+.typing-dot:nth-child(1) { animation-delay: 0ms; }
+.typing-dot:nth-child(2) { animation-delay: 200ms; }
+.typing-dot:nth-child(3) { animation-delay: 400ms; }
+
+@keyframes pulseDot {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-6px);
+    opacity: 1;
+  }
+}
+
+/* Selection */
+::selection {
+  background: rgba(59, 130, 246, 0.3);
+  color: #e2e8f0;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Mobile input zoom prevention */
+@media (max-width: 640px) {
+  .chat-input {
+    font-size: 16px;
+  }
+}
