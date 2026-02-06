@@ -756,22 +756,22 @@
     "doc_name": "QB2 Coupling Dimensions (Jan 2022)"
   },
   {
-    "id": "ENADATEHC_L80193_68_x_9_53_mm44_2_kgmBC_with_SCC_95_RBW_Rev_0.pdf_p1",
-    "source": "ENADATEHC_L80193_68_x_9_53_mm44_2_kgmBC_with_SCC_95_RBW_Rev_0.pdf",
-    "title": "193.68 mm 174.62 mm | 9.53 mm 171.45 mm | 44.20 kg/m #N/A mm",
+    "id": "ENA-DAT-E-HC_L80_193.68x9.53mm_BC_with_SCC_p1",
+    "source": "ENA-DAT-E-HC L80-193.68 x 9.53 mm-44.2 kgm-BC with SCC 95% RBW Rev.0.pdf",
+    "title": "EVRAZ Connection Datasheet | HC L80 193.68mm x 9.53mm 44.2 kg/m | BC with SCC | 95% RBW",
     "page": 1,
     "type": "document",
     "content": "193.68 mm 174.62 mm\r\n9.53 mm 171.45 mm\r\n44.20 kg/m #N/A mm\r\n43.28 kg/m\r\nCollapse Resistance [1] 39.9 MPa\r\n552 MPa Internal Yield (Burst) [2] 51.6 MPa\r\n655 MPa\r\n3,038 kN\r\n206.38 mm\r\n263.53 mm\r\nMake-up Loss [3] 119.06 mm\r\n3,207 kN\r\n88.9 %\r\n45.2 MPa\r\nOptimum 14,950 N m\r\nMinimum 11,190 N m\r\nMaximum 18,710 N m\r\nBody Yield Strength\r\nTensile Strength Minimum\r\nNon-flush\r\nAPI Compatible Yes\r\nConnection Performance\r\nJoint Efficiency\r\nInternal Pressure\r\nMake-up \r\nTorque\r\nConnection\r\nPipe Body Geometry\r\nElectric-welded\r\nOutside Diameter Inside Diameter\r\nHigh Collapse L80 \r\n193.68 mm 44.2 kg/m HC L80\r\n95% RBW\r\nWall Thickness\r\nNominal Linear Mass (T&C)\r\nPlain End Weight\r\nCoupling Outside Diameter\r\nConnection ID Type\r\nCoupling Length\r\nConnection Geometry\r\nConnection\r\nStandard Drift Diameter\r\nGrade HC L80\r\nPipe Body Performance\r\nYield Strength Minimum\r\nAlternative Drift Diameter\r\nBC with SCC\r\nBC with SCC\r\nNotes\r\n[1] Collapse strength determined by a combination of 8 x OD collapse testing, manufacturing controls and predictive modeling. \r\n[2] The internal yield (Burst) is calculated using API TR 5C3 Equation (10) using 95% RBW.\r\n[3] For SC and LC, make-up loss is defined as the end of pipe to thread vanish point (API 5B Tables 1 & 4, L4). For BC, it is defined as the end of \r\npipe to base of triangle stamp (API 5B Table 5, A1)\r\n[4] For BC, data is taken from API 5TP, based on utilizing API Modified Thread Compounds assuming phosphate couplings. If other thread \r\ncompounds are utilized, the torque correction factor noted by the compound manufacturer shall be considered. For BC with SCC, the torque \r\nvalues are estimates and the reduced OD may impact the final torque at position. Torque must be verified by triangle position for BC and BC with \r\nSCC.\r\n[4] \r\nT&C Joint Strength\r\nDatasheet Generated on: July 14, 2025",
-    "doc_name": "ENADATE: L80 193.68x9.53mm HC"
+    "doc_name": "Datasheet: HC L80 193.68mm 44.2 kg/m - BC with SCC Connection"
   },
   {
-    "id": "ENADATEMS_P110139_7_x_10_54_mm34_23_kgmEVRlock_EB_95_RBW_Rev_0.pdf_p1",
-    "source": "ENADATEMS_P110139_7_x_10_54_mm34_23_kgmEVRlock_EB_95_RBW_Rev_0.pdf",
-    "title": "139.70 mm 118.62 mm | 10.54 mm 115.44 mm | 34.05 kg/m #N/A mm",
+    "id": "ENA-DAT-E-MS_P110_139.7x10.54mm_EVRlock_EB_p1",
+    "source": "ENA-DAT-E-MS P110-139.7 x 10.54 mm-34.23 kgm-EVRlock EB 95% RBW Rev.0.pdf",
+    "title": "EVRAZ Connection Datasheet | MS P110 139.7mm x 10.54mm 34.23 kg/m | EVRlock EB | 95% RBW",
     "page": 1,
     "type": "document",
     "content": "139.70 mm 118.62 mm\r\n10.54 mm 115.44 mm\r\n34.05 kg/m #N/A mm\r\n33.57 kg/m\r\nCollapse Resistance [1] 100.2 MPa\r\n758 MPa Internal Yield (Burst) [2] 108.7 MPa\r\n862 MPa\r\n3,243 kN\r\n160.02 mm\r\n232.41 mm\r\nMake-up Loss [3] 114.94 mm\r\n3,688 kN\r\n100 %\r\n108.7 MPa\r\nOptimum 16,250 N m\r\nMinimum 13,500 N m\r\nMaximum 20,250 N m\r\nPlastic Torque [5] Maximum 28,200 N m\r\nRev.\r\nRev. 0\r\nPlain End Weight\r\nTensile Strength Minimum\r\nGrade\r\nCoupling Outside Diameter\r\nDatasheet Generated on: June 25, 2025\r\nEVRAZ is a registered trademark of EVRAZ Group SA. \u00a92014 EVRAZ Inc. NA. All rights reserved.\r\nEVRlock EB\r\nEVRlock EB\r\nCoupling Length\r\nConnection ID Type Flush\r\nConnection Performance\r\nInternal Pressure\r\nMake-up Torque [4] \r\nevrlock.com\r\nENA-DAT-E-MS P110-139.7 x 10.54 mm-34.23 kgm-EVRlock EB\r\nConnection\r\nT&C Joint Strength\r\n[1] Calculated based on equations from API TR 5C3 section 8.4.\r\n[2] The internal yield (Burst) is calculated using API TR 5C3 Equation (10) using 95% RBW.\r\n[3] Make-up loss is calculated as end of pin to plane of first contact with triangle stamp.\r\n[4] Make-up Torque is established through physical make-and-breaks of biased tolerance test pups.\r\n[5] Plastic torque is determined through torque to failure testing of physical samples manufactured to biased tolerances.\r\n[6] This datasheet is only valid for the specified OD, Weight and Grade.\r\nJoint Efficiency\r\nNotes\r\n139.7 mm 34.23 kg/m MS P110\r\nPipe Body Geometry\r\nOutside Diameter Inside Diameter\r\nBody Yield Strength\r\nConnection Geometry\r\nConnection\r\nPipe Body Performance\r\nYield Strength Minimum\r\nMS P110\r\nMild Sour P110 Electric-welded\r\nWall Thickness Standard Drift Diameter\r\nNominal Linear Mass (T&C) Alternative Drift Diameter\r\nEVRlock EB Enhanced Buttress",
-    "doc_name": "ENADATE: P110 139.7x10.54mm EB"
+    "doc_name": "Datasheet: MS P110 139.7mm 34.23 kg/m - EVRlock EB Connection"
   },
   {
     "id": "4b98ed_cc72c75b7e9c4a18a43f7865079f9d5a.pdf_p1",
