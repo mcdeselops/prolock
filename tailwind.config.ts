@@ -28,6 +28,7 @@ const config: Config = {
         },
         hero: {
           DEFAULT: 'var(--hero)',
+          dark: 'var(--hero-dark)',
           light: 'var(--hero-light)',
         },
       },
