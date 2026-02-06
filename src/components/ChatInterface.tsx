@@ -604,11 +604,27 @@ export function ChatInterface() {
                 </div>
               </motion.div>
 
+              {/* Hero banner — 16:9 steel mill image */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.05 }}
+                className="max-w-4xl mx-auto mb-10 rounded-2xl overflow-hidden"
+                style={{ aspectRatio: '16 / 9' }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/hero-banner.jpg"
+                  alt="Steel mill furnace"
+                  className="w-full h-full object-cover"
+                />
+              </motion.div>
+
               {/* Headline */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
+                transition={{ duration: 0.6, delay: 0.15 }}
                 className="text-center mb-10"
               >
                 <h1
@@ -632,7 +648,7 @@ export function ChatInterface() {
               <motion.form
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
+                transition={{ duration: 0.6, delay: 0.25 }}
                 onSubmit={handleSubmit}
                 className="max-w-2xl mx-auto mb-10"
               >
@@ -662,7 +678,7 @@ export function ChatInterface() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
+                transition={{ duration: 0.6, delay: 0.35 }}
                 className="max-w-2xl mx-auto"
               >
                 <p
@@ -677,7 +693,7 @@ export function ChatInterface() {
                       key={question}
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.3, delay: 0.4 + index * 0.05 }}
+                      transition={{ duration: 0.3, delay: 0.45 + index * 0.05 }}
                       onClick={() => handleSend(question)}
                       className="suggestion-chip"
                     >
@@ -691,7 +707,7 @@ export function ChatInterface() {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.6, delay: 0.6 }}
+                transition={{ duration: 0.6, delay: 0.65 }}
                 className="mt-16 text-center"
               >
                 <p
