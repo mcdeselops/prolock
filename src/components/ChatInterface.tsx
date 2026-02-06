@@ -9,8 +9,10 @@ import {
   ChevronDown,
   ChevronRight,
   Database,
-  X,
-  Menu,
+  MessageSquare,
+  BarChart3,
+  PanelRightClose,
+  PanelRightOpen,
 } from 'lucide-react'
 import { MarkdownRenderer } from './MarkdownRenderer'
 import type { Message, Source } from '@/types'
@@ -46,13 +48,17 @@ const INDEXED_DOCUMENTS = [
   { name: 'Performance Data — QB2-XL', type: 'spreadsheet' as const, chunks: 4 },
 ]
 
+const DOCUMENTS = INDEXED_DOCUMENTS.filter(d => d.type === 'document')
+const SPREADSHEETS = INDEXED_DOCUMENTS.filter(d => d.type === 'spreadsheet')
+
 export function ChatInterface() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [streamingContent, setStreamingContent] = useState('')
-  const [showSidebar, setShowSidebar] = useState(false)
+  const [sidebarExpanded, setSidebarExpanded] = useState(true)
   const [expandedSources, setExpandedSources] = useState<number | null>(null)
+  const [activeSection, setActiveSection] = useState<'chat' | 'docs' | 'data'>('docs')
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
@@ -173,18 +179,23 @@ export function ChatInterface() {
   const totalChunks = INDEXED_DOCUMENTS.reduce((sum, d) => sum + d.chunks, 0)
   const hasMessages = messages.length > 0
 
+  const sidebarNav = [
+    { id: 'chat' as const, icon: MessageSquare, label: 'Chat' },
+    { id: 'docs' as const, icon: FileText, label: 'Documents' },
+    { id: 'data' as const, icon: BarChart3, label: 'Performance' },
+  ]
+
   return (
     <div className="relative flex h-screen">
       {/* Grid overlay */}
       <div className="grid-overlay" />
 
       {/* Main chat area */}
-      <div className="flex-1 flex flex-col relative z-10">
+      <div className="flex-1 flex flex-col relative z-10 min-w-0">
         {/* Header */}
         <header className="glass sticky top-0 z-20 px-4 sm:px-6 py-4">
           <div className="max-w-4xl mx-auto flex items-center justify-between">
             <div className="flex items-center gap-3">
-              {/* Logo mark */}
               <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center font-sans font-bold text-white text-lg">
                 EV
               </div>
@@ -198,13 +209,16 @@ export function ChatInterface() {
               </div>
             </div>
 
+            {/* Mobile sidebar toggle */}
             <button
-              onClick={() => setShowSidebar(!showSidebar)}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-ink-tertiary hover:text-ink hover:bg-surface-tertiary/50 transition-all duration-200"
+              onClick={() => setSidebarExpanded(!sidebarExpanded)}
+              className="sm:hidden flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-ink-tertiary hover:text-ink hover:bg-surface-tertiary/50 transition-all duration-200"
             >
-              {showSidebar ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-              <FileText className="w-4 h-4" />
-              <span className="hidden sm:inline">Sources</span>
+              {sidebarExpanded ? (
+                <PanelRightClose className="w-4 h-4" />
+              ) : (
+                <PanelRightOpen className="w-4 h-4" />
+              )}
             </button>
           </div>
         </header>
@@ -220,7 +234,6 @@ export function ChatInterface() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6 }}
                 >
-                  {/* Icon */}
                   <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-blue-500/20 to-blue-700/20 flex items-center justify-center">
                     <Database className="w-8 h-8 text-accent" />
                   </div>
@@ -233,7 +246,6 @@ export function ChatInterface() {
                     performance data, coupling dimensions, torque specs, and more.
                   </p>
 
-                  {/* Suggestion chips */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl mx-auto mb-10">
                     {SUGGESTION_CHIPS.map((question, index) => (
                       <motion.button
@@ -250,7 +262,6 @@ export function ChatInterface() {
                   </div>
                 </motion.div>
 
-                {/* Input form (empty state) */}
                 <motion.form
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -311,7 +322,6 @@ export function ChatInterface() {
                         )}
                       </div>
 
-                      {/* Source attribution */}
                       {message.role === 'assistant' && message.sources && message.sources.length > 0 && (
                         <div className="mt-2 ml-1">
                           <button
@@ -370,7 +380,6 @@ export function ChatInterface() {
                 ))}
               </AnimatePresence>
 
-              {/* Streaming message */}
               {streamingContent && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -388,7 +397,6 @@ export function ChatInterface() {
                 </motion.div>
               )}
 
-              {/* Typing indicator */}
               {isLoading && !streamingContent && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -441,52 +449,207 @@ export function ChatInterface() {
         )}
       </div>
 
-      {/* Document sidebar */}
-      <AnimatePresence>
-        {showSidebar && (
-          <motion.aside
-            initial={{ width: 0, opacity: 0 }}
-            animate={{ width: 300, opacity: 1 }}
-            exit={{ width: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="relative z-10 border-l border-surface-tertiary/50 overflow-hidden flex-shrink-0"
-            style={{ background: 'rgba(10, 14, 20, 0.95)' }}
-          >
-            <div className="w-[300px] h-full overflow-y-auto p-4">
-              <h3 className="font-sans font-semibold text-ink text-sm mb-4 uppercase tracking-wider">
-                Indexed Documents
-              </h3>
-              <div className="space-y-1.5">
-                {INDEXED_DOCUMENTS.map((doc, i) => (
+      {/* Glassmorphism sidebar — right side */}
+      <motion.aside
+        animate={{ width: sidebarExpanded ? 300 : 60 }}
+        transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+        className="sidebar-glass relative z-10 flex-shrink-0 hidden sm:flex flex-col h-screen overflow-hidden"
+      >
+        {/* Gradient edge accent */}
+        <div className="absolute left-0 top-0 bottom-0 w-px sidebar-edge-glow" />
+
+        {/* Top — Brand / section indicator */}
+        <div className="px-3 pt-5 pb-4">
+          <AnimatePresence mode="wait">
+            {sidebarExpanded ? (
+              <motion.div
+                key="expanded-brand"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                className="flex items-center gap-2.5 px-1"
+              >
+                <Database className="w-5 h-5 text-accent flex-shrink-0" />
+                <span className="font-sans font-semibold text-ink text-sm whitespace-nowrap">
+                  Source Index
+                </span>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="collapsed-brand"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                className="flex justify-center"
+              >
+                <Database className="w-5 h-5 text-accent" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Nav tabs */}
+        <nav className="px-2 space-y-1">
+          {sidebarNav.map(item => {
+            const Icon = item.icon
+            const isActive = activeSection === item.id
+            return (
+              <button
+                key={item.id}
+                onClick={() => setActiveSection(item.id)}
+                className={`sidebar-nav-item w-full flex items-center gap-3 rounded-lg transition-all duration-200 ${
+                  sidebarExpanded ? 'px-3 py-2.5' : 'px-0 py-2.5 justify-center'
+                } ${
+                  isActive
+                    ? 'sidebar-nav-active text-ink'
+                    : 'text-ink-muted hover:text-ink-secondary hover:bg-white/[0.03]'
+                }`}
+              >
+                <Icon className="w-4 h-4 flex-shrink-0" />
+                {sidebarExpanded && (
+                  <motion.span
+                    initial={{ opacity: 0, width: 0 }}
+                    animate={{ opacity: 1, width: 'auto' }}
+                    exit={{ opacity: 0, width: 0 }}
+                    className="text-sm font-sans whitespace-nowrap overflow-hidden"
+                  >
+                    {item.label}
+                  </motion.span>
+                )}
+              </button>
+            )
+          })}
+        </nav>
+
+        {/* Separator */}
+        <div className="mx-3 my-3 h-px bg-white/[0.06]" />
+
+        {/* Content area */}
+        <div className="flex-1 overflow-y-auto scrollbar-hide px-2">
+          <AnimatePresence mode="wait">
+            {activeSection === 'chat' && (
+              <motion.div
+                key="chat-section"
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-1.5"
+              >
+                {sidebarExpanded ? (
+                  <p className="px-2 py-3 text-xs text-ink-muted leading-relaxed">
+                    {messages.length === 0
+                      ? 'Start a conversation to see your chat history here.'
+                      : `${messages.length} messages in this session.`}
+                  </p>
+                ) : (
+                  <div className="flex justify-center py-3">
+                    <span className="text-xs font-mono text-ink-muted">{messages.length}</span>
+                  </div>
+                )}
+              </motion.div>
+            )}
+
+            {activeSection === 'docs' && (
+              <motion.div
+                key="docs-section"
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-1"
+              >
+                {DOCUMENTS.map((doc, i) => (
                   <div
                     key={i}
-                    className="flex items-start gap-2.5 px-3 py-2.5 rounded-lg hover:bg-surface-tertiary/30 transition-colors group"
+                    className={`sidebar-doc-item flex items-start rounded-lg transition-all duration-200 group ${
+                      sidebarExpanded ? 'gap-2.5 px-2.5 py-2' : 'justify-center px-0 py-2'
+                    }`}
                   >
-                    {doc.type === 'spreadsheet' ? (
-                      <Table2 className="w-4 h-4 text-green-400/70 mt-0.5 flex-shrink-0" />
-                    ) : (
-                      <FileText className="w-4 h-4 text-accent/70 mt-0.5 flex-shrink-0" />
+                    <FileText className="w-4 h-4 text-accent/60 group-hover:text-accent mt-0.5 flex-shrink-0 transition-colors" />
+                    {sidebarExpanded && (
+                      <div className="min-w-0">
+                        <p className="text-[13px] text-ink-secondary group-hover:text-ink transition-colors truncate leading-snug">
+                          {doc.name}
+                        </p>
+                        <p className="text-[11px] text-ink-muted font-mono mt-0.5">
+                          {doc.chunks} chunk{doc.chunks !== 1 ? 's' : ''}
+                        </p>
+                      </div>
                     )}
-                    <div className="min-w-0">
-                      <p className="text-sm text-ink-secondary group-hover:text-ink transition-colors truncate">
-                        {doc.name}
-                      </p>
-                      <p className="text-xs text-ink-muted font-mono">
-                        {doc.chunks} chunk{doc.chunks !== 1 ? 's' : ''}
-                      </p>
-                    </div>
                   </div>
                 ))}
-              </div>
-              <div className="mt-6 pt-4 border-t border-surface-tertiary/50">
-                <p className="text-xs text-ink-muted font-mono text-center">
-                  {totalChunks} total chunks indexed
-                </p>
-              </div>
-            </div>
-          </motion.aside>
-        )}
-      </AnimatePresence>
+              </motion.div>
+            )}
+
+            {activeSection === 'data' && (
+              <motion.div
+                key="data-section"
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-1"
+              >
+                {SPREADSHEETS.map((doc, i) => (
+                  <div
+                    key={i}
+                    className={`sidebar-doc-item flex items-start rounded-lg transition-all duration-200 group ${
+                      sidebarExpanded ? 'gap-2.5 px-2.5 py-2' : 'justify-center px-0 py-2'
+                    }`}
+                  >
+                    <Table2 className="w-4 h-4 text-emerald-400/60 group-hover:text-emerald-400 mt-0.5 flex-shrink-0 transition-colors" />
+                    {sidebarExpanded && (
+                      <div className="min-w-0">
+                        <p className="text-[13px] text-ink-secondary group-hover:text-ink transition-colors truncate leading-snug">
+                          {doc.name}
+                        </p>
+                        <p className="text-[11px] text-ink-muted font-mono mt-0.5">
+                          {doc.chunks} chunk{doc.chunks !== 1 ? 's' : ''}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Bottom — Status + collapse toggle */}
+        <div className="mt-auto px-2 pb-4 pt-2 space-y-2">
+          <div className="mx-1 h-px bg-white/[0.06]" />
+
+          {sidebarExpanded && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="px-2 py-1.5"
+            >
+              <p className="text-[11px] text-ink-muted font-mono leading-relaxed">
+                {totalChunks} chunks &middot; {INDEXED_DOCUMENTS.length} docs
+              </p>
+            </motion.div>
+          )}
+
+          <button
+            onClick={() => setSidebarExpanded(!sidebarExpanded)}
+            className="w-full flex items-center justify-center gap-2 px-2 py-2 rounded-lg text-ink-muted hover:text-ink-secondary hover:bg-white/[0.04] transition-all duration-200"
+            aria-label={sidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
+          >
+            {sidebarExpanded ? (
+              <>
+                <PanelRightClose className="w-4 h-4" />
+                <span className="text-xs">Collapse</span>
+              </>
+            ) : (
+              <PanelRightOpen className="w-4 h-4" />
+            )}
+          </button>
+        </div>
+      </motion.aside>
     </div>
   )
 }

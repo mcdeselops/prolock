@@ -192,6 +192,53 @@
   background: rgba(59, 130, 246, 0.08);
 }
 
+/* Glassmorphism sidebar */
+.sidebar-glass {
+  backdrop-filter: blur(20px) saturate(1.3);
+  background: rgba(10, 14, 20, 0.75);
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.sidebar-edge-glow {
+  background: linear-gradient(
+    180deg,
+    rgba(59, 130, 246, 0.4) 0%,
+    rgba(59, 130, 246, 0.08) 40%,
+    transparent 70%
+  );
+}
+
+/* Sidebar nav items */
+.sidebar-nav-item {
+  position: relative;
+}
+
+.sidebar-nav-active {
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.sidebar-nav-active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 25%;
+  bottom: 25%;
+  width: 2px;
+  border-radius: 1px;
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+}
+
+/* Sidebar document items */
+.sidebar-doc-item {
+  cursor: default;
+}
+
+.sidebar-doc-item:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
