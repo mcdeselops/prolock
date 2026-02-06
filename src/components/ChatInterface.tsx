@@ -282,8 +282,20 @@ export function ChatInterface() {
                   )}
                 </div>
 
-                {/* Sources — reference pills */}
-                {message.role === 'assistant' && message.sources && message.sources.length > 0 && (
+                {/* Sources — reference pills (deduplicated by file) */}
+                {message.role === 'assistant' && message.sources && message.sources.length > 0 && (() => {
+                  const deduped: { name: string; file: string; pages: (number | string)[]; score: number; snippet: string }[] = []
+                  const seen = new Set<string>()
+                  for (const src of message.sources) {
+                    if (!seen.has(src.file)) {
+                      seen.add(src.file)
+                      deduped.push({ name: src.name, file: src.file, pages: [src.page], score: src.score, snippet: src.snippet })
+                    } else {
+                      const existing = deduped.find(d => d.file === src.file)
+                      if (existing && !existing.pages.includes(src.page)) existing.pages.push(src.page)
+                    }
+                  }
+                  return (
                   <div className="mt-4">
                     <button
                       onClick={() =>
@@ -297,15 +309,21 @@ export function ChatInterface() {
                       ) : (
                         <ChevronRight className="w-3 h-3" />
                       )}
-                      References
+                      References ({deduped.length})
                     </button>
 
                     {/* Always show pills */}
                     <div className="flex flex-wrap gap-2">
-                      {message.sources.map((source, si) => (
-                        <span key={si} className="reference-pill">
-                          [{si + 1}] {source.name}
-                        </span>
+                      {deduped.map((source, si) => (
+                        <a
+                          key={si}
+                          href={`/api/docs?file=${encodeURIComponent(source.file)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="reference-pill no-underline hover:opacity-80 transition-opacity cursor-pointer"
+                        >
+                          [{si + 1}] {source.name} (p.{source.pages.join(', ')})
+                        </a>
                       ))}
                     </div>
 
@@ -319,7 +337,7 @@ export function ChatInterface() {
                           transition={{ duration: 0.2 }}
                           className="mt-3 space-y-2 overflow-hidden"
                         >
-                          {message.sources.map((source, si) => (
+                          {deduped.map((source, si) => (
                             <div
                               key={si}
                               className="p-3 rounded-xl text-xs"
@@ -330,7 +348,7 @@ export function ChatInterface() {
                                   {source.name}
                                 </span>
                                 <span style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-label)' }}>
-                                  p.{source.page} &middot; {source.score}
+                                  p.{source.pages.join(', ')} &middot; {source.score}
                                 </span>
                               </div>
                               <p style={{ color: 'var(--text-muted)', lineHeight: 1.5, fontFamily: 'var(--font-body)' }}>
@@ -342,7 +360,8 @@ export function ChatInterface() {
                       )}
                     </AnimatePresence>
                   </div>
-                )}
+                  )
+                })()}
               </div>
 
               {/* User avatar — hero circle with user icon */}
@@ -453,15 +472,15 @@ export function ChatInterface() {
     </div>
   )
 
-  /* ── Collect unique referenced documents from chat sources ── */
+  /* ── Collect unique referenced documents from chat sources (dedup by file) ── */
   const referencedDocs = (() => {
     const seen = new Set<string>()
     const docs: { name: string; file: string; type: 'document' | 'spreadsheet'; pages: Set<number | string> }[] = []
     for (const msg of messages) {
       if (msg.sources) {
         for (const src of msg.sources) {
-          if (!seen.has(src.name)) {
-            seen.add(src.name)
+          if (!seen.has(src.file)) {
+            seen.add(src.file)
             const indexed = INDEXED_DOCUMENTS.find(d => d.name === src.name)
             docs.push({
               name: src.name,
@@ -470,7 +489,7 @@ export function ChatInterface() {
               pages: new Set([src.page]),
             })
           } else {
-            const existing = docs.find(d => d.name === src.name)
+            const existing = docs.find(d => d.file === src.file)
             if (existing) existing.pages.add(src.page)
           }
         }
