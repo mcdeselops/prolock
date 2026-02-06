@@ -17,6 +17,7 @@ export interface Message {
 
 export interface Source {
   name: string
+  file: string
   page: number | string
   score: number
   snippet: string

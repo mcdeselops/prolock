@@ -10,6 +10,7 @@ import {
   ChevronRight,
   X,
   User,
+  Download,
 } from 'lucide-react'
 import { MarkdownRenderer } from './MarkdownRenderer'
 import type { Message, Source } from '@/types'
@@ -281,8 +282,20 @@ export function ChatInterface() {
                   )}
                 </div>
 
-                {/* Sources — reference pills */}
-                {message.role === 'assistant' && message.sources && message.sources.length > 0 && (
+                {/* Sources — reference pills (deduplicated by file) */}
+                {message.role === 'assistant' && message.sources && message.sources.length > 0 && (() => {
+                  const deduped: { name: string; file: string; pages: (number | string)[]; score: number; snippet: string }[] = []
+                  const seen = new Set<string>()
+                  for (const src of message.sources) {
+                    if (!seen.has(src.file)) {
+                      seen.add(src.file)
+                      deduped.push({ name: src.name, file: src.file, pages: [src.page], score: src.score, snippet: src.snippet })
+                    } else {
+                      const existing = deduped.find(d => d.file === src.file)
+                      if (existing && !existing.pages.includes(src.page)) existing.pages.push(src.page)
+                    }
+                  }
+                  return (
                   <div className="mt-4">
                     <button
                       onClick={() =>
@@ -296,15 +309,21 @@ export function ChatInterface() {
                       ) : (
                         <ChevronRight className="w-3 h-3" />
                       )}
-                      References
+                      References ({deduped.length})
                     </button>
 
                     {/* Always show pills */}
                     <div className="flex flex-wrap gap-2">
-                      {message.sources.map((source, si) => (
-                        <span key={si} className="reference-pill">
-                          [{si + 1}] {source.name}
-                        </span>
+                      {deduped.map((source, si) => (
+                        <a
+                          key={si}
+                          href={`/api/docs?file=${encodeURIComponent(source.file)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="reference-pill no-underline hover:opacity-80 transition-opacity cursor-pointer"
+                        >
+                          [{si + 1}] {source.name} (p.{source.pages.join(', ')})
+                        </a>
                       ))}
                     </div>
 
@@ -318,7 +337,7 @@ export function ChatInterface() {
                           transition={{ duration: 0.2 }}
                           className="mt-3 space-y-2 overflow-hidden"
                         >
-                          {message.sources.map((source, si) => (
+                          {deduped.map((source, si) => (
                             <div
                               key={si}
                               className="p-3 rounded-xl text-xs"
@@ -329,7 +348,7 @@ export function ChatInterface() {
                                   {source.name}
                                 </span>
                                 <span style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-label)' }}>
-                                  p.{source.page} &middot; {source.score}
+                                  p.{source.pages.join(', ')} &middot; {source.score}
                                 </span>
                               </div>
                               <p style={{ color: 'var(--text-muted)', lineHeight: 1.5, fontFamily: 'var(--font-body)' }}>
@@ -341,7 +360,8 @@ export function ChatInterface() {
                       )}
                     </AnimatePresence>
                   </div>
-                )}
+                  )
+                })()}
               </div>
 
               {/* User avatar — hero circle with user icon */}
@@ -452,122 +472,94 @@ export function ChatInterface() {
     </div>
   )
 
-  const renderSpecsGallery = () => (
-    <div className="w-full">
-      {/* Gallery header */}
-      <div className="max-w-4xl mx-auto px-6 py-4">
+  /* ── Collect unique referenced documents from chat sources (dedup by file) ── */
+  const referencedDocs = (() => {
+    const seen = new Set<string>()
+    const docs: { name: string; file: string; type: 'document' | 'spreadsheet'; pages: Set<number | string> }[] = []
+    for (const msg of messages) {
+      if (msg.sources) {
+        for (const src of msg.sources) {
+          if (!seen.has(src.file)) {
+            seen.add(src.file)
+            const indexed = INDEXED_DOCUMENTS.find(d => d.name === src.name)
+            docs.push({
+              name: src.name,
+              file: src.file,
+              type: indexed?.type ?? 'document',
+              pages: new Set([src.page]),
+            })
+          } else {
+            const existing = docs.find(d => d.file === src.file)
+            if (existing) existing.pages.add(src.page)
+          }
+        }
+      }
+    }
+    return docs
+  })()
+
+  const renderReferencedDocs = () => (
+    <div className="w-full h-full flex flex-col">
+      {/* Header */}
+      <div className="max-w-4xl mx-auto px-6 py-3 w-full">
         <h2
           className="text-xs font-medium uppercase tracking-widest"
           style={{ fontFamily: 'var(--font-label)', color: 'var(--text-muted)', letterSpacing: '0.15em' }}
         >
-          Indexed Specifications
+          Referenced Documents
         </h2>
       </div>
 
-      {/* Specs cards */}
-      <div className="max-w-4xl mx-auto px-6 pb-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {/* Technical Documents card */}
-          <div className="specs-card">
-            <div className="specs-card-header">
-              <span
-                className="text-base font-bold"
-                style={{ fontFamily: 'var(--font-display)', color: 'var(--text-on-dark)', letterSpacing: '-0.03em' }}
-              >
-                Technical Documents
-              </span>
-              <span
-                className="text-[10px] font-medium"
-                style={{ fontFamily: 'var(--font-label)', color: 'var(--accent)', letterSpacing: '0.05em' }}
-              >
-                {INDEXED_DOCUMENTS.filter(d => d.type === 'document').length} docs
-              </span>
-            </div>
-            <div className="p-3">
-              {INDEXED_DOCUMENTS.filter(d => d.type === 'document').map((doc, i) => (
-                <div
-                  key={i}
-                  className="flex items-center justify-between py-2 px-2"
-                  style={{ borderBottom: i < INDEXED_DOCUMENTS.filter(d => d.type === 'document').length - 1 ? '1px solid var(--border)' : 'none' }}
-                >
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="specs-data-cell w-7 h-7 flex items-center justify-center flex-shrink-0 rounded-md">
-                      <FileText className="w-3 h-3" style={{ color: 'var(--accent)' }} />
-                    </div>
-                    <span
-                      className="text-[13px] truncate"
-                      style={{ fontFamily: 'var(--font-body)', color: 'var(--text-secondary)' }}
-                    >
-                      {doc.name}
-                    </span>
-                  </div>
-                  <span
-                    className="text-[11px] flex-shrink-0 ml-2"
-                    style={{ fontFamily: 'var(--font-label)', color: 'var(--text-muted)' }}
-                  >
-                    {doc.chunks} chunks
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Performance Data card */}
-          <div className="specs-card">
-            <div className="specs-card-header">
-              <span
-                className="text-base font-bold"
-                style={{ fontFamily: 'var(--font-display)', color: 'var(--text-on-dark)', letterSpacing: '-0.03em' }}
-              >
-                Performance Data
-              </span>
-              <span
-                className="text-[10px] font-medium"
-                style={{ fontFamily: 'var(--font-label)', color: 'var(--accent)', letterSpacing: '0.05em' }}
-              >
-                {INDEXED_DOCUMENTS.filter(d => d.type === 'spreadsheet').length} sheets
-              </span>
-            </div>
-            <div className="p-3">
-              {INDEXED_DOCUMENTS.filter(d => d.type === 'spreadsheet').map((doc, i) => (
-                <div
-                  key={i}
-                  className="flex items-center justify-between py-2 px-2"
-                  style={{ borderBottom: i < INDEXED_DOCUMENTS.filter(d => d.type === 'spreadsheet').length - 1 ? '1px solid var(--border)' : 'none' }}
-                >
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="specs-data-cell w-7 h-7 flex items-center justify-center flex-shrink-0 rounded-md">
-                      <Table2 className="w-3 h-3 text-emerald-500" />
-                    </div>
-                    <span
-                      className="text-[13px] truncate"
-                      style={{ fontFamily: 'var(--font-body)', color: 'var(--text-secondary)' }}
-                    >
-                      {doc.name}
-                    </span>
-                  </div>
-                  <span
-                    className="text-[11px] flex-shrink-0 ml-2"
-                    style={{ fontFamily: 'var(--font-label)', color: 'var(--text-muted)' }}
-                  >
-                    {doc.chunks} chunks
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Summary footer */}
-        <div className="mt-4 flex items-center justify-between">
-          <p className="text-[11px]" style={{ fontFamily: 'var(--font-label)', color: 'var(--text-muted)' }}>
-            {INDEXED_DOCUMENTS.length} documents &middot; {totalChunks} total chunks indexed
-          </p>
-          <p className="text-[11px]" style={{ fontFamily: 'var(--font-label)', color: 'var(--text-muted)' }}>
-            BM25 retrieval &middot; Claude Sonnet
+      {referencedDocs.length === 0 ? (
+        /* Empty state */
+        <div className="flex-1 flex items-center justify-center px-6">
+          <p
+            className="text-[13px] text-center"
+            style={{ fontFamily: 'var(--font-body)', color: 'var(--text-muted)' }}
+          >
+            Documents cited in the conversation will appear here.
           </p>
         </div>
-      </div>
+      ) : (
+        /* Document list */
+        <div className="max-w-4xl mx-auto px-6 pb-4 w-full flex-1 overflow-y-auto">
+          <div className="flex flex-wrap gap-3">
+            {referencedDocs.map((doc, i) => (
+              <a
+                key={i}
+                href={`/api/docs?file=${encodeURIComponent(doc.file)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="specs-card flex items-center gap-3 px-4 py-3 no-underline hover:opacity-80 transition-opacity cursor-pointer"
+                style={{ minWidth: 0 }}
+              >
+                <div className="specs-data-cell w-8 h-8 flex items-center justify-center flex-shrink-0 rounded-lg">
+                  {doc.type === 'spreadsheet' ? (
+                    <Table2 className="w-3.5 h-3.5 text-emerald-500" />
+                  ) : (
+                    <FileText className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
+                  )}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <span
+                    className="text-[13px] font-medium block truncate"
+                    style={{ fontFamily: 'var(--font-body)', color: 'var(--text-secondary)' }}
+                  >
+                    {doc.name}
+                  </span>
+                  <span
+                    className="text-[11px]"
+                    style={{ fontFamily: 'var(--font-label)', color: 'var(--text-muted)' }}
+                  >
+                    {doc.pages.size} {doc.pages.size === 1 ? 'page' : 'pages'} cited
+                  </span>
+                </div>
+                <Download className="w-3.5 h-3.5 flex-shrink-0" style={{ color: 'var(--text-muted)' }} />
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 
@@ -822,7 +814,7 @@ export function ChatInterface() {
                     {renderInput()}
                   </div>
                   <div className="specs-panel">
-                    {renderSpecsGallery()}
+                    {renderReferencedDocs()}
                   </div>
                 </div>
               ) : (
@@ -833,7 +825,7 @@ export function ChatInterface() {
                     {renderInput()}
                   </div>
                   <div className="specs-panel">
-                    {renderSpecsGallery()}
+                    {renderReferencedDocs()}
                   </div>
                 </>
               )}
