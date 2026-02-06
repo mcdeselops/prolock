@@ -192,6 +192,56 @@
   background: rgba(59, 130, 246, 0.08);
 }
 
+/* Hero chat panel */
+.hero-chat-panel {
+  backdrop-filter: blur(16px);
+  background: rgba(17, 24, 32, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+}
+
+/* View specs trigger button */
+.specs-trigger {
+  background: rgba(17, 24, 32, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.specs-trigger:hover {
+  background: rgba(17, 24, 32, 0.7);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+/* Bottom pane */
+.bottom-pane {
+  backdrop-filter: blur(24px) saturate(1.2);
+  background: rgba(10, 14, 20, 0.92);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Specs table styling */
+.specs-table {
+  border-collapse: collapse;
+}
+
+.specs-table th {
+  @apply px-4 py-2.5 text-xs font-mono text-ink-muted uppercase tracking-wider;
+  background: rgba(26, 35, 50, 0.4);
+  border-bottom: 1px solid rgba(100, 116, 139, 0.2);
+}
+
+.specs-table td {
+  @apply px-4 py-2.5 text-sm text-ink-secondary;
+  border-bottom: 1px solid rgba(100, 116, 139, 0.08);
+}
+
+.specs-table tbody tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
 /* Glassmorphism sidebar */
 .sidebar-glass {
   backdrop-filter: blur(20px) saturate(1.3);
