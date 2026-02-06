@@ -3,136 +3,128 @@
 @tailwind utilities;
 
 /* Fonts — matching actual Wix site typography
-   Rocky Mountain: Avenir Heavy (≈Poppins 700), Roboto body, DIN Next (≈Jost) labels
-   InterPro: Roboto display, Avenir Light (≈Poppins 300) body, DIN Next (≈Jost) labels */
+   Interpro: Roboto display, Poppins body, Jost labels */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&family=Jost:wght@300;400;500&display=swap');
 
 :root {
-  --font-sans: 'Roboto', 'Poppins', system-ui, sans-serif;
-  --font-display: 'Poppins', 'Roboto', system-ui, sans-serif;
-  --font-mono: 'Jost', 'DIN Alternate', system-ui, sans-serif;
+  --font-display: 'Roboto', 'Helvetica Neue', sans-serif;
+  --font-body: 'Poppins', 'Avenir', 'Helvetica Neue', sans-serif;
+  --font-label: 'Jost', 'DIN Alternate', sans-serif;
 
-  /* Light professional theme — extracted from actual Wix site HTML
-     InterPro defaults: #133446 teal hero, #EE842F orange accent */
-  --surface: #FFFFFF;
-  --surface-secondary: #F7F8FA;
-  --surface-tertiary: #EEEEEE;
-  --hero: #133446;
-  --hero-dark: #0d2533;
-  --hero-light: rgba(19, 52, 70, 0.06);
-  --ink: #171717;
-  --ink-secondary: #5A6570;
-  --ink-tertiary: #8694A5;
-  --ink-muted: #B0B8C4;
+  /* Interpro theme — from evrlock-layout.jsx */
   --accent: #EE842F;
-  --accent-hover: #d9741e;
-  --accent-muted: rgba(238, 132, 47, 0.12);
-  --border: #E8EAED;
-  --border-light: #F0F1F3;
-  --shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 2px 12px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 4px 24px rgba(0, 0, 0, 0.10);
+  --accent-dark: #c96d1e;
+  --accent-dim: rgba(238, 132, 47, 0.08);
+  --accent-mid: rgba(238, 132, 47, 0.19);
+  --bg: #FFFFFF;
+  --bg-card: #F7F8FA;
+  --bg-input: #FFFFFF;
+  --bg-hero: #133446;
+  --border: #EEEEEE;
+  --text-primary: #171717;
+  --text-secondary: #5A6570;
+  --text-muted: #8694A5;
+  --text-on-dark: #FFFFFF;
+  --shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 2px 12px rgba(0, 0, 0, 0.12);
 }
 
 @layer base {
   body {
-    background: linear-gradient(168deg, var(--surface) 0%, #F4F6F9 50%, #EFF2F6 100%);
+    background: var(--bg);
+    font-family: var(--font-body);
+    color: var(--text-primary);
     min-height: 100vh;
-    font-family: var(--font-sans), system-ui, sans-serif;
     overflow-x: hidden;
-    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
   }
 
   code, pre {
-    font-family: var(--font-mono), monospace;
+    font-family: var(--font-label);
   }
 }
 
-/* Grid overlay — subtle warm version */
-.grid-overlay {
-  display: none; /* clean look matching actual sites — no grid */
+/* ─── Header ─── */
+.header-hero {
+  background: var(--bg-hero);
 }
 
-/* Header bar — dark hero section matching site nav */
-.glass {
-  background: linear-gradient(135deg, var(--hero-dark) 0%, var(--hero) 100%);
-  border-bottom: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-}
-
-/* Chat container */
+/* ─── Chat container ─── */
 .chat-container {
-  @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+  @apply max-w-[800px] mx-auto px-6 sm:px-10;
 }
 
-/* User message bubble — dark hero pill matching site buttons */
+/* ─── User message — pill on hero bg ─── */
 .message-user {
-  background: linear-gradient(135deg, var(--hero) 0%, var(--hero-dark) 100%);
-  border-radius: 20px 20px 4px 20px;
-  color: white;
-  box-shadow: 0 1px 3px rgba(19, 52, 70, 0.2);
-}
-
-/* Assistant message bubble — clean card with accent border */
-.message-assistant {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--accent);
-  border-radius: 16px 16px 16px 4px;
-  box-shadow: var(--shadow);
-}
-
-/* Chat input — pill-shaped matching site button style */
-.chat-input {
-  @apply w-full px-6 py-4 text-ink focus:outline-none focus:ring-2 transition-all duration-200;
-  background: var(--surface);
-  border: 1.5px solid var(--border);
+  background: var(--bg-hero);
   border-radius: 999px;
-  box-shadow: var(--shadow-md);
-  color: var(--ink);
+  padding: 10px 20px;
+  color: var(--text-on-dark);
+  max-width: 400px;
+}
+
+/* ─── Assistant message — transparent, text-only ─── */
+.message-assistant {
+  background: transparent;
+}
+
+/* ─── Chat input — white pill with border ─── */
+.chat-input {
+  @apply w-full text-sm focus:outline-none transition-all duration-200;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-family: var(--font-body);
 }
 
 .chat-input::placeholder {
-  color: var(--ink-muted);
+  color: var(--text-muted);
 }
 
-.chat-input:focus {
-  --tw-ring-color: rgba(238, 132, 47, 0.3);
-  border-color: var(--accent);
-  box-shadow: var(--shadow-md), 0 0 0 3px rgba(238, 132, 47, 0.1);
+.chat-input-wrapper {
+  background: var(--bg);
+  border-radius: 999px;
+  padding: 10px 10px 10px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
 }
 
-/* Markdown prose styling — light theme */
+/* ─── Markdown prose styling ─── */
 .prose-chat {
-  @apply leading-relaxed;
-  color: var(--ink-secondary);
+  color: var(--text-secondary);
+  line-height: 1.75;
+  font-family: var(--font-body);
+  letter-spacing: -0.01em;
 }
 
 .prose-chat p {
   @apply mb-4 last:mb-0;
+  font-size: 15px;
 }
 
 .prose-chat strong {
   @apply font-semibold;
-  color: var(--ink);
+  color: var(--text-primary);
 }
 
 .prose-chat em {
   @apply italic;
-  color: var(--ink-secondary);
 }
 
 .prose-chat code {
   @apply px-1.5 py-0.5 rounded text-sm;
-  font-family: var(--font-mono);
-  background: var(--surface-secondary);
-  color: var(--hero);
+  font-family: var(--font-label);
+  background: var(--bg-card);
+  color: var(--bg-hero);
   border: 1px solid var(--border);
 }
 
 .prose-chat pre {
   @apply p-4 rounded-xl overflow-x-auto my-4;
-  background: var(--hero);
+  background: var(--bg-hero);
   color: #FFFFFF;
 }
 
@@ -155,12 +147,13 @@
 
 .prose-chat li {
   @apply mb-2;
+  font-size: 15px;
 }
 
 .prose-chat blockquote {
   @apply pl-4 border-l-2 italic my-4;
   border-color: var(--accent);
-  color: var(--ink-secondary);
+  color: var(--text-secondary);
 }
 
 .prose-chat a {
@@ -169,7 +162,7 @@
 }
 
 .prose-chat a:hover {
-  color: var(--accent-hover);
+  color: var(--accent-dark);
 }
 
 .prose-chat h1, .prose-chat h2, .prose-chat h3 {
@@ -180,20 +173,20 @@
 
 .prose-chat h1 {
   @apply text-2xl;
-  color: var(--ink);
+  color: var(--text-primary);
 }
 
 .prose-chat h2 {
   @apply text-xl;
-  color: var(--hero);
+  color: var(--bg-hero);
 }
 
 .prose-chat h3 {
   @apply text-lg;
-  color: var(--ink);
+  color: var(--text-primary);
 }
 
-/* Tables in markdown */
+/* ─── Tables in markdown ─── */
 .prose-chat table {
   @apply w-full my-4 text-sm;
   border-collapse: collapse;
@@ -201,95 +194,95 @@
 
 .prose-chat th {
   @apply px-3 py-2 text-left font-semibold;
-  background: var(--hero);
+  background: var(--bg-hero);
   color: white;
   border-bottom: 1px solid var(--border);
 }
 
 .prose-chat td {
   @apply px-3 py-2;
-  color: var(--ink-secondary);
+  color: var(--text-secondary);
   border-bottom: 1px solid var(--border);
 }
 
 .prose-chat tr:nth-child(even) td {
-  background: var(--surface-secondary);
+  background: var(--bg-card);
 }
 
-/* Suggested question chips — pill buttons matching site */
+/* ─── Suggested prompts — pill with border ─── */
 .suggestion-chip {
-  @apply px-5 py-2.5 text-sm transition-all duration-200 cursor-pointer;
-  border-radius: 999px;
-  background: var(--surface);
+  @apply text-sm cursor-pointer transition-all duration-200;
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-secondary);
   border: 1px solid var(--border);
-  color: var(--ink-secondary);
-  box-shadow: var(--shadow);
+  border-radius: 999px;
+  padding: 8px 18px;
 }
 
 .suggestion-chip:hover {
   border-color: var(--accent);
   color: var(--accent);
-  background: var(--accent-muted);
-  box-shadow: 0 2px 8px rgba(238, 132, 47, 0.15);
-  transform: translateY(-1px);
 }
 
-/* Hero chat panel — card with hero header */
-.hero-chat-panel {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(0, 0, 0, 0.02);
-}
-
-/* View specs trigger button */
-.specs-trigger {
-  background: var(--surface);
-  border: 1px solid var(--border);
+/* ─── References pill ─── */
+.reference-pill {
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  background: var(--bg-card);
   border-radius: 999px;
+  padding: 6px 16px;
+  cursor: pointer;
+  border: 1px solid var(--border);
 }
 
-.specs-trigger:hover {
+.reference-pill:hover {
   border-color: var(--accent);
   color: var(--accent);
-  background: var(--accent-muted);
 }
 
-/* Bottom pane — light card */
-.bottom-pane {
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-  border-radius: 24px 24px 0 0;
-  box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.10);
+/* ─── Specs panel (gallery area) ─── */
+.specs-panel {
+  background: var(--bg-card);
 }
 
-/* Specs table styling */
-.specs-table {
-  border-collapse: collapse;
+.specs-card {
+  background: var(--bg);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow: var(--shadow);
 }
 
-.specs-table th {
-  @apply px-4 py-2.5 text-xs uppercase tracking-wider;
-  font-family: var(--font-mono);
-  color: var(--ink-tertiary);
-  background: var(--surface-secondary);
-  border-bottom: 1px solid var(--border);
+.specs-card-header {
+  padding: 14px 20px;
+  background: var(--bg-hero);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-.specs-table td {
-  @apply px-4 py-2.5 text-sm;
-  color: var(--ink-secondary);
-  border-bottom: 1px solid var(--border);
+.specs-data-cell {
+  padding: 8px 10px;
+  background: var(--bg-card);
+  border-radius: 8px;
 }
 
-.specs-table tbody tr:hover td {
-  background: var(--surface-secondary);
-}
-
-/* Sidebar — light with hero header */
+/* ─── Sidebar ─── */
 .sidebar-glass {
-  background: var(--surface);
+  background: var(--bg);
   border-left: 1px solid var(--border);
-  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.08);
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-header {
+  padding: 20px 24px 14px;
+  background: var(--bg-hero);
 }
 
 .sidebar-edge-glow {
@@ -302,36 +295,15 @@
   width: 2px;
 }
 
-/* Sidebar nav items */
-.sidebar-nav-item {
-  position: relative;
-}
-
-.sidebar-nav-active {
-  background: var(--accent-muted);
-}
-
-.sidebar-nav-active::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 25%;
-  bottom: 25%;
-  width: 2px;
-  border-radius: 1px;
-  background: var(--accent);
-}
-
-/* Sidebar document items */
 .sidebar-doc-item {
-  cursor: default;
+  cursor: pointer;
 }
 
 .sidebar-doc-item:hover {
-  background: var(--surface-secondary);
+  background: var(--bg-card);
 }
 
-/* Scrollbar — subtle on light */
+/* ─── Scrollbar ─── */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -350,7 +322,6 @@
   background: rgba(0, 0, 0, 0.2);
 }
 
-/* Hide scrollbar */
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -360,10 +331,10 @@
   display: none;
 }
 
-/* Typing indicator dots */
+/* ─── Typing indicator ─── */
 .typing-dot {
   @apply w-2 h-2 rounded-full;
-  background: var(--accent);
+  background: var(--text-muted);
   animation: pulseDot 1.4s ease-in-out infinite;
 }
 
@@ -374,7 +345,7 @@
 @keyframes pulseDot {
   0%, 60%, 100% {
     transform: translateY(0);
-    opacity: 0.3;
+    opacity: 0.4;
   }
   30% {
     transform: translateY(-6px);
@@ -382,57 +353,24 @@
   }
 }
 
-/* Streaming cursor blink */
+/* ─── Streaming cursor ─── */
 .streaming-cursor {
-  display: inline-block;
-  width: 2px;
-  height: 1.1em;
+  @apply inline-block w-2 h-5 animate-pulse ml-0.5;
   background: var(--accent);
-  margin-left: 2px;
-  vertical-align: text-bottom;
-  animation: cursorBlink 1s steps(2) infinite;
 }
 
-@keyframes cursorBlink {
-  0% { opacity: 1; }
-  50% { opacity: 0; }
-  100% { opacity: 1; }
-}
-
-/* Selection */
+/* ─── Selection ─── */
 ::selection {
   background: rgba(238, 132, 47, 0.2);
-  color: var(--ink);
+  color: var(--text-primary);
 }
 
-/* Smooth scroll */
+/* ─── Smooth scroll ─── */
 html {
   scroll-behavior: smooth;
 }
 
-/* Feature badge */
-.feature-badge {
-  @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs;
-  background: var(--hero-light);
-  color: var(--hero);
-  border: 1px solid rgba(19, 52, 70, 0.08);
-}
-
-/* New chat button in header */
-.btn-new-chat {
-  @apply flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200;
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.btn-new-chat:hover {
-  background: rgba(255, 255, 255, 0.18);
-  color: #FFFFFF;
-  border-color: rgba(255, 255, 255, 0.25);
-}
-
-/* Mobile input zoom prevention */
+/* ─── Mobile ─── */
 @media (max-width: 640px) {
   .chat-input {
     font-size: 16px;
