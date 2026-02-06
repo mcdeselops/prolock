@@ -82,6 +82,7 @@ export async function POST(req: Request) {
               `data: ${JSON.stringify({
                 sources: results.map((r) => ({
                   name: r.doc_name,
+                  file: r.source,
                   page: r.page,
                   score: Math.round(r.score * 100) / 100,
                   snippet: r.content.substring(0, 150) + '...',

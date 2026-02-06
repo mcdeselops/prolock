@@ -10,6 +10,7 @@ import {
   ChevronRight,
   X,
   User,
+  Download,
 } from 'lucide-react'
 import { MarkdownRenderer } from './MarkdownRenderer'
 import type { Message, Source } from '@/types'
@@ -455,7 +456,7 @@ export function ChatInterface() {
   /* ── Collect unique referenced documents from chat sources ── */
   const referencedDocs = (() => {
     const seen = new Set<string>()
-    const docs: { name: string; type: 'document' | 'spreadsheet'; pages: Set<number | string> }[] = []
+    const docs: { name: string; file: string; type: 'document' | 'spreadsheet'; pages: Set<number | string> }[] = []
     for (const msg of messages) {
       if (msg.sources) {
         for (const src of msg.sources) {
@@ -464,6 +465,7 @@ export function ChatInterface() {
             const indexed = INDEXED_DOCUMENTS.find(d => d.name === src.name)
             docs.push({
               name: src.name,
+              file: src.file,
               type: indexed?.type ?? 'document',
               pages: new Set([src.page]),
             })
@@ -504,9 +506,12 @@ export function ChatInterface() {
         <div className="max-w-4xl mx-auto px-6 pb-4 w-full flex-1 overflow-y-auto">
           <div className="flex flex-wrap gap-3">
             {referencedDocs.map((doc, i) => (
-              <div
+              <a
                 key={i}
-                className="specs-card flex items-center gap-3 px-4 py-3"
+                href={`/api/docs?file=${encodeURIComponent(doc.file)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="specs-card flex items-center gap-3 px-4 py-3 no-underline hover:opacity-80 transition-opacity cursor-pointer"
                 style={{ minWidth: 0 }}
               >
                 <div className="specs-data-cell w-8 h-8 flex items-center justify-center flex-shrink-0 rounded-lg">
@@ -516,7 +521,7 @@ export function ChatInterface() {
                     <FileText className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
                   )}
                 </div>
-                <div className="min-w-0">
+                <div className="min-w-0 flex-1">
                   <span
                     className="text-[13px] font-medium block truncate"
                     style={{ fontFamily: 'var(--font-body)', color: 'var(--text-secondary)' }}
@@ -530,7 +535,8 @@ export function ChatInterface() {
                     {doc.pages.size} {doc.pages.size === 1 ? 'page' : 'pages'} cited
                   </span>
                 </div>
-              </div>
+                <Download className="w-3.5 h-3.5 flex-shrink-0" style={{ color: 'var(--text-muted)' }} />
+              </a>
             ))}
           </div>
         </div>
