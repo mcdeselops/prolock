@@ -14,10 +14,8 @@ import {
   Printer,
   X,
   MessageSquarePlus,
-  Zap,
-  Search,
-  Shield,
-  Bot,
+  ArrowRight,
+  User,
 } from 'lucide-react'
 import { MarkdownRenderer } from './MarkdownRenderer'
 import type { Message, Source } from '@/types'
@@ -190,52 +188,63 @@ export function ChatInterface() {
 
   return (
     <div className="h-screen flex flex-col overflow-hidden">
-      {/* Grid overlay */}
-      <div className="grid-overlay" />
+      {/* Breathing gradient background */}
+      <div className="breathing-gradient" />
 
       {/* ─── Header ─── */}
-      <header className="glass sticky top-0 z-30 px-6 py-3.5">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg flex items-center justify-center font-sans font-bold text-white text-sm" style={{ background: 'var(--accent)' }}>
-              EV
+      <header className="h-[100px] flex-shrink-0">
+        <div className="h-full max-w-7xl mx-auto px-6 flex items-center justify-between">
+          {/* Logo with wordmark */}
+          <motion.button
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            onClick={handleNewChat}
+            className="flex items-center gap-4 cursor-pointer hover:opacity-80 transition-opacity"
+            aria-label="Return to home"
+          >
+            <div className="w-12 h-12 rounded-full bg-[var(--accent)]/10 flex items-center justify-center">
+              <span className="font-display text-2xl font-medium text-accent">P</span>
             </div>
-            <div className="hidden sm:flex flex-col">
-              <span className="font-sans font-semibold text-[15px] leading-tight" style={{ color: '#FFFFFF' }}>
-                EVRlock
+            <div className="hidden sm:flex flex-col items-start text-left">
+              <span className="font-display text-2xl sm:text-3xl font-medium text-ink tracking-tight leading-tight">
+                PROLock
               </span>
-              <span className="text-[11px] leading-tight" style={{ color: 'rgba(255,255,255,0.5)' }}>
-                Knowledge Base
+              <span className="font-sans text-sm text-accent">
+                Connection Knowledge Base
               </span>
             </div>
-          </div>
+          </motion.button>
 
-          <div className="flex items-center gap-2">
+          {/* Right-side controls */}
+          <motion.div
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex items-center gap-3"
+          >
             {hasMessages && (
               <motion.button
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 onClick={handleNewChat}
-                className="btn-new-chat"
+                className="p-2 rounded-full hover:bg-[var(--surface-secondary)] transition-colors"
+                aria-label="New chat"
               >
-                <MessageSquarePlus className="w-4 h-4" />
-                <span className="hidden sm:inline">New Chat</span>
+                <MessageSquarePlus className="w-5 h-5 text-[var(--ink)]" />
               </motion.button>
             )}
             <button
               onClick={() => setShowSidebar(true)}
-              className="flex items-center gap-2 px-4 py-2 rounded-full text-sm transition-all duration-200"
-              style={{ color: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.15)' }}
+              className="p-2 rounded-full hover:bg-[var(--surface-secondary)] transition-colors"
+              aria-label="Resources"
             >
-              <BookOpen className="w-4 h-4" />
-              <span className="hidden sm:inline">Resources</span>
+              <BookOpen className="w-5 h-5 text-[var(--ink)]" />
             </button>
-          </div>
+          </motion.div>
         </div>
       </header>
 
       {/* ─── Content Area ─── */}
-      <div className="flex-1 relative overflow-hidden z-10">
+      <div className="flex-1 relative overflow-hidden">
         {/* ── Top Pane ── */}
         <motion.div
           className="absolute inset-0 flex flex-col"
@@ -244,125 +253,110 @@ export function ChatInterface() {
         >
           <div className="flex-1 overflow-hidden flex flex-col">
             {!hasMessages ? (
-              /* ── Welcome Hero ── */
-              <div className="flex-1 flex items-center">
-                <div className="w-full max-w-7xl mx-auto px-6 lg:px-16 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-                  {/* Left — Marketing copy */}
+              /* ── Welcome Screen — single column centered (portfolio style) ── */
+              <div className="flex-1 overflow-y-auto">
+                <div className="w-full max-w-3xl mx-auto px-6 py-12 sm:py-16">
+                  {/* Headline */}
                   <motion.div
-                    initial={{ opacity: 0, y: 24 }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
+                    transition={{ duration: 0.6, delay: 0.1 }}
+                    className="text-center mb-10"
                   >
-                    <div className="flex flex-wrap gap-2 mb-6">
-                      <motion.span
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.2 }}
-                        className="feature-badge"
-                      >
-                        <Zap className="w-3 h-3" />
-                        Instant Answers
-                      </motion.span>
-                      <motion.span
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.3 }}
-                        className="feature-badge"
-                      >
-                        <Search className="w-3 h-3" />
-                        BM25 Retrieval
-                      </motion.span>
-                      <motion.span
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.4 }}
-                        className="feature-badge"
-                      >
-                        <Shield className="w-3 h-3" />
-                        Source-Cited
-                      </motion.span>
-                    </div>
-
-                    <h1 className="text-4xl sm:text-5xl lg:text-[3.25rem] font-sans font-bold text-ink leading-[1.15] mb-5">
-                      Your connection data.
-                      <br />
-                      <span className="text-accent">Answered instantly.</span>
+                    <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-medium text-[var(--ink)] mb-6 tracking-tight">
+                      Your connection data.{' '}
+                      <span className="text-[var(--accent)]">Answered instantly.</span>
                     </h1>
-                    <p className="text-ink-tertiary text-lg max-w-md mb-8 leading-relaxed">
+                    <p className="text-lg sm:text-xl text-[var(--ink-secondary)] max-w-2xl mx-auto leading-relaxed">
                       AI-powered technical assistant for EVRlock premium OCTG
                       connections — running procedures, performance data, torque
                       specs, and more.
                     </p>
+                  </motion.div>
 
-                    <div className="flex flex-wrap gap-2 mb-8">
-                      {SUGGESTION_CHIPS.map((q, i) => (
+                  {/* Input field */}
+                  <motion.form
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    onSubmit={handleSubmit}
+                    className="relative max-w-2xl mx-auto mb-10"
+                  >
+                    <textarea
+                      ref={inputRef}
+                      value={input}
+                      onChange={e => setInput(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      placeholder="Ask about PROLock connections..."
+                      rows={1}
+                      className="chat-input pr-14 resize-none"
+                    />
+                    <button
+                      type="submit"
+                      disabled={!input.trim() || isLoading}
+                      className="group absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-xl bg-[var(--accent)] hover:bg-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-200"
+                      aria-label="Send message"
+                    >
+                      <Send className="w-5 h-5 text-white group-hover:text-[var(--accent)] transition-colors duration-200" />
+                    </button>
+                  </motion.form>
+
+                  {/* Suggested questions — 2x2 grid with flow-button style */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.3 }}
+                    className="max-w-2xl mx-auto"
+                  >
+                    <p className="text-sm text-[var(--ink-tertiary)] mb-4 text-center">
+                      Or try one of these:
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {SUGGESTION_CHIPS.map((question, index) => (
                         <motion.button
-                          key={q}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.3 + i * 0.08 }}
-                          onClick={() => handleSend(q)}
-                          className="suggestion-chip text-left text-sm"
+                          key={question}
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ duration: 0.3, delay: 0.4 + index * 0.05 }}
+                          onClick={() => handleSend(question)}
+                          className="suggestion-btn text-left"
                         >
-                          {q}
+                          {/* Left arrow — slides in on hover */}
+                          <ArrowRight
+                            className="absolute w-3.5 h-3.5 left-[-25%] stroke-[var(--ink)] fill-none z-[9] group-hover:left-3 group-hover:stroke-white transition-all duration-[800ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+                          />
+                          {/* Text content */}
+                          <span className="relative z-[1] -translate-x-2 group-hover:translate-x-2 transition-all duration-[800ms] ease-out text-left">
+                            {question}
+                          </span>
+                          {/* Expanding background */}
+                          <span className="absolute inset-0 bg-[var(--accent)] rounded-full opacity-0 scale-0 group-hover:scale-100 group-hover:opacity-100 group-hover:rounded-xl transition-all duration-[800ms] ease-[cubic-bezier(0.19,1,0.22,1)]" />
+                          {/* Right arrow — slides out on hover */}
+                          <ArrowRight
+                            className="absolute w-3.5 h-3.5 right-3 stroke-[var(--ink)] fill-none z-[9] group-hover:right-[-25%] group-hover:stroke-white transition-all duration-[800ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+                          />
                         </motion.button>
                       ))}
                     </div>
-
-                    <p className="text-xs text-ink-muted font-mono">
-                      {totalChunks} indexed chunks &middot; {INDEXED_DOCUMENTS.length} documents &middot; BM25 + Claude
-                    </p>
                   </motion.div>
 
-                  {/* Right — Chat container */}
+                  {/* Footer stats */}
                   <motion.div
-                    initial={{ opacity: 0, y: 24 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.12 }}
-                    className="h-[440px] lg:h-[500px] flex flex-col hero-chat-panel rounded-2xl overflow-hidden"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.6, delay: 0.6 }}
+                    className="mt-16 text-center"
                   >
-                    <div className="flex-1 flex items-center justify-center p-8">
-                      <div className="text-center">
-                        <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: 'var(--accent-muted)' }}>
-                          <Bot className="w-8 h-8 text-accent" />
-                        </div>
-                        <p className="text-ink-secondary text-sm font-medium mb-1">
-                          EVRlock Assistant
-                        </p>
-                        <p className="text-ink-muted text-xs leading-relaxed max-w-[220px] mx-auto">
-                          Ask a question about connections, procedures, or performance data
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="p-3 pt-0">
-                      <form onSubmit={handleSubmit} className="relative">
-                        <textarea
-                          ref={inputRef}
-                          value={input}
-                          onChange={e => setInput(e.target.value)}
-                          onKeyDown={handleKeyDown}
-                          placeholder="Ask about EVRlock connections..."
-                          rows={1}
-                          className="chat-input pr-12 resize-none text-sm"
-                        />
-                        <button
-                          type="submit"
-                          disabled={!input.trim() || isLoading}
-                          className="absolute right-2.5 top-1/2 -translate-y-1/2 p-2 rounded-full bg-accent hover:bg-accent-hover disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-200"
-                          aria-label="Send message"
-                        >
-                          <Send className="w-4 h-4 text-white" />
-                        </button>
-                      </form>
-                    </div>
+                    <p className="text-sm text-[var(--ink-muted)]">
+                      {totalChunks} indexed chunks &middot; {INDEXED_DOCUMENTS.length} documents &middot; BM25 + Claude
+                    </p>
                   </motion.div>
                 </div>
               </div>
             ) : (
               /* ── Active Chat ── */
               <>
-                <div className="flex-1 overflow-y-auto pb-4">
+                <div className="flex-1 overflow-y-auto pb-4 min-h-0">
                   <div className="chat-container py-6 space-y-6">
                     <AnimatePresence mode="popLayout">
                       {messages.map((message, index) => (
@@ -370,27 +364,28 @@ export function ChatInterface() {
                           key={message.id}
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3, delay: index * 0.03 }}
-                          className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                          transition={{ duration: 0.3, delay: index * 0.05 }}
+                          className={`flex gap-4 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                         >
-                          <div className={`max-w-[85%] sm:max-w-[75%] ${message.role === 'assistant' ? 'flex gap-2.5' : ''}`}>
-                            {message.role === 'assistant' && (
-                              <div className="flex-shrink-0 mt-1">
-                                <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: 'var(--accent-muted)' }}>
-                                  <Bot className="w-3.5 h-3.5 text-accent" />
-                                </div>
+                          {/* Assistant avatar */}
+                          {message.role === 'assistant' && (
+                            <div className="flex-shrink-0">
+                              <div className="w-8 h-8 rounded-full bg-[var(--accent)]/10 flex items-center justify-center">
+                                <span className="font-display text-sm font-medium text-accent">P</span>
                               </div>
-                            )}
-                            <div className="flex-1 min-w-0">
+                            </div>
+                          )}
+
+                          <div className={`flex-1 max-w-[85%] sm:max-w-[75%] ${message.role === 'user' ? 'flex justify-end' : ''}`}>
                             <div
                               className={
                                 message.role === 'user'
                                   ? 'message-user px-5 py-3'
-                                  : 'message-assistant px-5 py-4'
+                                  : 'message-assistant'
                               }
                             >
                               {message.role === 'user' ? (
-                                <p className="text-white">{message.content}</p>
+                                <p className="text-ink">{message.content}</p>
                               ) : (
                                 <div className="prose-chat">
                                   <MarkdownRenderer content={message.content} />
@@ -398,13 +393,14 @@ export function ChatInterface() {
                               )}
                             </div>
 
+                            {/* Sources */}
                             {message.role === 'assistant' && message.sources && message.sources.length > 0 && (
-                              <div className="mt-2 ml-1">
+                              <div className="mt-3">
                                 <button
                                   onClick={() =>
                                     setExpandedSources(expandedSources === index ? null : index)
                                   }
-                                  className="flex items-center gap-1.5 text-xs text-ink-muted hover:text-ink-tertiary transition-colors"
+                                  className="flex items-center gap-1.5 text-xs text-ink-muted hover:text-accent transition-colors"
                                 >
                                   {expandedSources === index ? (
                                     <ChevronDown className="w-3 h-3" />
@@ -427,10 +423,9 @@ export function ChatInterface() {
                                       {message.sources.map((source, si) => (
                                         <div
                                           key={si}
-                                          className="p-3 rounded-lg text-xs"
+                                          className="p-3 rounded-xl text-xs bg-surface-secondary"
                                           style={{
-                                            background: 'var(--surface-secondary)',
-                                            border: '1px solid var(--border)',
+                                            border: '1px solid color-mix(in srgb, var(--ink-muted) 20%, transparent)',
                                           }}
                                         >
                                           <div className="flex items-center justify-between mb-1">
@@ -451,56 +446,58 @@ export function ChatInterface() {
                                 </AnimatePresence>
                               </div>
                             )}
-                            </div>
                           </div>
+
+                          {/* User avatar */}
+                          {message.role === 'user' && (
+                            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-surface-tertiary flex items-center justify-center">
+                              <User className="w-4 h-4 text-ink-tertiary" />
+                            </div>
+                          )}
                         </motion.div>
                       ))}
                     </AnimatePresence>
 
+                    {/* Streaming message */}
                     {streamingContent && (
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="flex justify-start"
+                        className="flex gap-4 justify-start"
                       >
-                        <div className="max-w-[85%] sm:max-w-[75%] flex gap-2.5">
-                          <div className="flex-shrink-0 mt-1">
-                            <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: 'var(--accent-muted)' }}>
-                              <Bot className="w-3.5 h-3.5 text-accent" />
-                            </div>
+                        <div className="flex-shrink-0">
+                          <div className="w-8 h-8 rounded-full bg-[var(--accent)]/10 flex items-center justify-center">
+                            <span className="font-display text-sm font-medium text-accent">P</span>
                           </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="message-assistant px-5 py-4">
-                              <div className="prose-chat">
-                                <MarkdownRenderer content={streamingContent} />
-                                <span className="streaming-cursor" />
-                              </div>
+                        </div>
+                        <div className="flex-1 max-w-[85%] sm:max-w-[75%]">
+                          <div className="message-assistant">
+                            <div className="prose-chat">
+                              <MarkdownRenderer content={streamingContent} />
+                              <span className="streaming-cursor" />
                             </div>
                           </div>
                         </div>
                       </motion.div>
                     )}
 
+                    {/* Typing indicator */}
                     {isLoading && !streamingContent && (
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0 }}
-                        className="flex justify-start"
+                        className="flex gap-4 justify-start"
                       >
-                        <div className="flex gap-2.5">
-                          <div className="flex-shrink-0 mt-1">
-                            <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: 'var(--accent-muted)' }}>
-                              <Bot className="w-3.5 h-3.5 text-accent" />
-                            </div>
+                        <div className="flex-shrink-0">
+                          <div className="w-8 h-8 rounded-full bg-[var(--accent)]/10 flex items-center justify-center">
+                            <span className="font-display text-sm font-medium text-accent">P</span>
                           </div>
-                          <div className="message-assistant px-5 py-4">
-                            <div className="flex items-center gap-1.5">
-                              <div className="typing-dot" />
-                              <div className="typing-dot" />
-                              <div className="typing-dot" />
-                            </div>
-                          </div>
+                        </div>
+                        <div className="flex items-center gap-1.5 py-3">
+                          <div className="typing-dot" />
+                          <div className="typing-dot" />
+                          <div className="typing-dot" />
                         </div>
                       </motion.div>
                     )}
@@ -510,26 +507,28 @@ export function ChatInterface() {
                 </div>
 
                 {/* Input bar */}
-                <div className="flex-shrink-0 px-4 sm:px-6 py-4" style={{ background: 'var(--surface)', borderTop: '1px solid var(--border)' }}>
-                  <form onSubmit={handleSubmit} className="max-w-4xl mx-auto relative">
-                    <textarea
-                      ref={inputRef}
-                      value={input}
-                      onChange={e => setInput(e.target.value)}
-                      onKeyDown={handleKeyDown}
-                      placeholder={isLoading ? 'Thinking...' : 'Ask about EVRlock connections...'}
-                      disabled={isLoading}
-                      rows={1}
-                      className="chat-input pr-14 resize-none"
-                    />
-                    <button
-                      type="submit"
-                      disabled={!input.trim() || isLoading}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-accent hover:bg-accent-hover disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-200"
-                      aria-label="Send message"
-                    >
-                      <Send className="w-5 h-5 text-white" />
-                    </button>
+                <div className="bg-[var(--surface)]">
+                  <form onSubmit={handleSubmit} className="chat-container py-4">
+                    <div className="relative">
+                      <textarea
+                        ref={inputRef}
+                        value={input}
+                        onChange={e => setInput(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        placeholder={isLoading ? 'Thinking...' : 'Ask about PROLock connections...'}
+                        disabled={isLoading}
+                        rows={1}
+                        className="chat-input pr-14 resize-none"
+                      />
+                      <button
+                        type="submit"
+                        disabled={!input.trim() || isLoading}
+                        className="group absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-xl bg-[var(--accent)] hover:bg-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-200"
+                        aria-label="Send message"
+                      >
+                        <Send className="w-5 h-5 text-white group-hover:text-[var(--accent)] transition-colors duration-200" />
+                      </button>
+                    </div>
                   </form>
                 </div>
               </>
@@ -540,7 +539,7 @@ export function ChatInterface() {
           <div className="flex-shrink-0 flex justify-center py-3">
             <button
               onClick={() => setBottomPaneOpen(true)}
-              className="specs-trigger flex items-center gap-2 px-5 py-2 rounded-full text-xs font-mono text-ink-muted hover:text-ink-secondary transition-all duration-200"
+              className="specs-trigger flex items-center gap-2 px-5 py-2 text-xs font-mono text-ink-muted hover:text-ink-secondary transition-all duration-200"
             >
               <ChevronUp className="w-3.5 h-3.5" />
               View Specifications
@@ -557,20 +556,20 @@ export function ChatInterface() {
         >
           {/* Handle / close bar */}
           <div className="flex items-center justify-between px-6 pt-4 pb-2">
-            <h2 className="font-sans font-semibold text-ink text-lg">
+            <h2 className="font-display text-2xl font-medium text-ink tracking-tight">
               Connection Specifications
             </h2>
             <div className="flex items-center gap-3">
               <button
                 onClick={() => window.print()}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs text-ink-tertiary hover:text-ink hover:bg-black/[0.04] transition-all"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs text-ink-tertiary hover:text-ink hover:bg-surface-secondary transition-all"
               >
                 <Printer className="w-3.5 h-3.5" />
                 Print
               </button>
               <button
                 onClick={() => setBottomPaneOpen(false)}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs text-ink-tertiary hover:text-ink hover:bg-black/[0.04] transition-all"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs text-ink-tertiary hover:text-ink hover:bg-surface-secondary transition-all"
               >
                 <ChevronDown className="w-3.5 h-3.5" />
                 Close
@@ -650,7 +649,7 @@ export function ChatInterface() {
               </div>
 
               {/* Summary */}
-              <div className="mt-6 pt-4 border-t border-black/[0.06] flex items-center justify-between">
+              <div className="mt-6 pt-4 flex items-center justify-between" style={{ borderTop: '1px solid color-mix(in srgb, var(--ink-muted) 20%, transparent)' }}>
                 <p className="text-xs text-ink-muted font-mono">
                   {INDEXED_DOCUMENTS.length} documents &middot; {totalChunks} total chunks indexed
                 </p>
@@ -692,19 +691,19 @@ export function ChatInterface() {
               <div className="flex items-center justify-between px-5 pt-5 pb-4">
                 <div className="flex items-center gap-2.5">
                   <Database className="w-5 h-5 text-accent" />
-                  <span className="font-sans font-semibold text-ink text-sm">
+                  <span className="font-display text-lg font-medium text-ink">
                     Source Index
                   </span>
                 </div>
                 <button
                   onClick={() => setShowSidebar(false)}
-                  className="p-1.5 rounded-lg text-ink-muted hover:text-ink hover:bg-black/[0.04] transition-all"
+                  className="p-1.5 rounded-lg text-ink-muted hover:text-ink hover:bg-surface-secondary transition-all"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
-              <div className="mx-5 h-px bg-black/[0.06]" />
+              <div className="mx-5 h-px" style={{ background: 'color-mix(in srgb, var(--ink-muted) 20%, transparent)' }} />
 
               {/* Document list */}
               <div className="flex-1 overflow-y-auto scrollbar-hide px-3 py-3 space-y-1">
@@ -728,7 +727,7 @@ export function ChatInterface() {
                   </div>
                 ))}
 
-                <div className="mx-2 my-3 h-px bg-black/[0.06]" />
+                <div className="mx-2 my-3 h-px" style={{ background: 'color-mix(in srgb, var(--ink-muted) 20%, transparent)' }} />
 
                 <p className="px-2 pb-2 text-[11px] font-mono text-ink-muted uppercase tracking-wider">
                   Performance Data
@@ -752,7 +751,7 @@ export function ChatInterface() {
               </div>
 
               {/* Footer */}
-              <div className="px-5 py-4 border-t border-black/[0.06]">
+              <div className="px-5 py-4" style={{ borderTop: '1px solid color-mix(in srgb, var(--ink-muted) 20%, transparent)' }}>
                 <p className="text-[11px] text-ink-muted font-mono text-center">
                   {totalChunks} chunks &middot; {INDEXED_DOCUMENTS.length} docs &middot; RAG-powered
                 </p>

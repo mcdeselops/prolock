@@ -30,12 +30,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
 
           return isInline ? (
             <code
-              className="px-1.5 py-0.5 rounded text-sm font-mono"
-              style={{
-                background: 'var(--surface-secondary)',
-                color: 'var(--hero)',
-                border: '1px solid var(--border)',
-              }}
+              className="px-1.5 py-0.5 bg-surface-tertiary rounded text-sm"
               {...props}
             >
               {children}

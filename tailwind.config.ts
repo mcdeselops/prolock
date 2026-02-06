@@ -8,6 +8,7 @@ const config: Config = {
       fontFamily: {
         sans: ['var(--font-sans)', ...defaultTheme.fontFamily.sans],
         mono: ['var(--font-mono)', ...defaultTheme.fontFamily.mono],
+        display: ['var(--font-display)', 'Georgia', 'serif'],
       },
       colors: {
         surface: {
@@ -26,15 +27,11 @@ const config: Config = {
           hover: 'var(--accent-hover)',
           muted: 'var(--accent-muted)',
         },
-        hero: {
-          DEFAULT: 'var(--hero)',
-          dark: 'var(--hero-dark)',
-          light: 'var(--hero-light)',
-        },
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-out forwards',
         'slide-up': 'slideUp 0.5s ease-out forwards',
+        'pulse-soft': 'pulseSoft 3s ease-in-out infinite',
         'pulse-dot': 'pulseDot 1.4s ease-in-out infinite',
       },
       keyframes: {
@@ -45,6 +42,10 @@ const config: Config = {
         slideUp: {
           '0%': { opacity: '0', transform: 'translateY(10px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        pulseSoft: {
+          '0%, 100%': { opacity: '0.4' },
+          '50%': { opacity: '0.8' },
         },
         pulseDot: {
           '0%, 60%, 100%': { transform: 'translateY(0)', opacity: '0.4' },
