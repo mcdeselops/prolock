@@ -18,6 +18,7 @@
   --surface-secondary: #F7F8FA;
   --surface-tertiary: #EEEEEE;
   --hero: #133446;
+  --hero-dark: #0d2533;
   --hero-light: rgba(19, 52, 70, 0.06);
   --ink: #171717;
   --ink-secondary: #5A6570;
@@ -26,14 +27,16 @@
   --accent: #EE842F;
   --accent-hover: #d9741e;
   --accent-muted: rgba(238, 132, 47, 0.12);
-  --border: #EEEEEE;
-  --shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  --border: #E8EAED;
+  --border-light: #F0F1F3;
+  --shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 2px 12px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 4px 24px rgba(0, 0, 0, 0.10);
 }
 
 @layer base {
   body {
-    background: var(--surface);
+    background: linear-gradient(168deg, var(--surface) 0%, #F4F6F9 50%, #EFF2F6 100%);
     min-height: 100vh;
     font-family: var(--font-sans), system-ui, sans-serif;
     overflow-x: hidden;
@@ -52,9 +55,9 @@
 
 /* Header bar — dark hero section matching site nav */
 .glass {
-  background: var(--hero);
+  background: linear-gradient(135deg, var(--hero-dark) 0%, var(--hero) 100%);
   border-bottom: none;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 /* Chat container */
@@ -64,25 +67,28 @@
 
 /* User message bubble — dark hero pill matching site buttons */
 .message-user {
-  background: var(--hero);
-  border-radius: 999px;
+  background: linear-gradient(135deg, var(--hero) 0%, var(--hero-dark) 100%);
+  border-radius: 20px 20px 4px 20px;
   color: white;
+  box-shadow: 0 1px 3px rgba(19, 52, 70, 0.2);
 }
 
-/* Assistant message bubble — clean card on light bg */
+/* Assistant message bubble — clean card with accent border */
 .message-assistant {
-  background: var(--surface-secondary);
+  background: var(--surface);
   border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
   border-radius: 16px 16px 16px 4px;
+  box-shadow: var(--shadow);
 }
 
 /* Chat input — pill-shaped matching site button style */
 .chat-input {
   @apply w-full px-6 py-4 text-ink focus:outline-none focus:ring-2 transition-all duration-200;
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: 999px;
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-md);
   color: var(--ink);
 }
 
@@ -93,7 +99,7 @@
 .chat-input:focus {
   --tw-ring-color: rgba(238, 132, 47, 0.3);
   border-color: var(--accent);
-  box-shadow: var(--shadow), 0 0 0 3px rgba(238, 132, 47, 0.1);
+  box-shadow: var(--shadow-md), 0 0 0 3px rgba(238, 132, 47, 0.1);
 }
 
 /* Markdown prose styling — light theme */
@@ -217,19 +223,22 @@
   background: var(--surface);
   border: 1px solid var(--border);
   color: var(--ink-secondary);
+  box-shadow: var(--shadow);
 }
 
 .suggestion-chip:hover {
   border-color: var(--accent);
   color: var(--accent);
   background: var(--accent-muted);
+  box-shadow: 0 2px 8px rgba(238, 132, 47, 0.15);
+  transform: translateY(-1px);
 }
 
 /* Hero chat panel — card with hero header */
 .hero-chat-panel {
   background: var(--surface);
   border: 1px solid var(--border);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(0, 0, 0, 0.02);
 }
 
 /* View specs trigger button */
@@ -249,8 +258,8 @@
 .bottom-pane {
   background: var(--surface);
   border-top: 1px solid var(--border);
-  border-radius: 20px 20px 0 0;
-  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.08);
+  border-radius: 24px 24px 0 0;
+  box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.10);
 }
 
 /* Specs table styling */
@@ -354,7 +363,7 @@
 /* Typing indicator dots */
 .typing-dot {
   @apply w-2 h-2 rounded-full;
-  background: var(--ink-tertiary);
+  background: var(--accent);
   animation: pulseDot 1.4s ease-in-out infinite;
 }
 
@@ -365,12 +374,29 @@
 @keyframes pulseDot {
   0%, 60%, 100% {
     transform: translateY(0);
-    opacity: 0.4;
+    opacity: 0.3;
   }
   30% {
     transform: translateY(-6px);
     opacity: 1;
   }
+}
+
+/* Streaming cursor blink */
+.streaming-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: var(--accent);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: cursorBlink 1s steps(2) infinite;
+}
+
+@keyframes cursorBlink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 /* Selection */
@@ -382,6 +408,28 @@
 /* Smooth scroll */
 html {
   scroll-behavior: smooth;
+}
+
+/* Feature badge */
+.feature-badge {
+  @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs;
+  background: var(--hero-light);
+  color: var(--hero);
+  border: 1px solid rgba(19, 52, 70, 0.08);
+}
+
+/* New chat button in header */
+.btn-new-chat {
+  @apply flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.btn-new-chat:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 /* Mobile input zoom prevention */

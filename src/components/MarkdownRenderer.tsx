@@ -32,8 +32,9 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             <code
               className="px-1.5 py-0.5 rounded text-sm font-mono"
               style={{
-                background: 'rgba(26, 35, 50, 0.8)',
-                color: '#93c5fd',
+                background: 'var(--surface-secondary)',
+                color: 'var(--hero)',
+                border: '1px solid var(--border)',
               }}
               {...props}
             >
