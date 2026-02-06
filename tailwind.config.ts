@@ -1,38 +1,38 @@
 import type { Config } from 'tailwindcss'
-import defaultTheme from 'tailwindcss/defaultTheme'
 
 const config: Config = {
   content: ['./src/**/*.{ts,tsx}'],
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-sans)', ...defaultTheme.fontFamily.sans],
-        mono: ['var(--font-mono)', ...defaultTheme.fontFamily.mono],
-        display: ['var(--font-display)', 'Georgia', 'serif'],
+        display: ['var(--font-display)'],
+        body: ['var(--font-body)'],
+        label: ['var(--font-label)'],
       },
       colors: {
-        surface: {
-          DEFAULT: 'var(--surface)',
-          secondary: 'var(--surface-secondary)',
-          tertiary: 'var(--surface-tertiary)',
-        },
-        ink: {
-          DEFAULT: 'var(--ink)',
-          secondary: 'var(--ink-secondary)',
-          tertiary: 'var(--ink-tertiary)',
-          muted: 'var(--ink-muted)',
-        },
         accent: {
           DEFAULT: 'var(--accent)',
-          hover: 'var(--accent-hover)',
-          muted: 'var(--accent-muted)',
+          dark: 'var(--accent-dark)',
+          dim: 'var(--accent-dim)',
+          mid: 'var(--accent-mid)',
+        },
+        bg: {
+          DEFAULT: 'var(--bg)',
+          card: 'var(--bg-card)',
+          input: 'var(--bg-input)',
+          hero: 'var(--bg-hero)',
+        },
+        border: 'var(--border)',
+        text: {
+          primary: 'var(--text-primary)',
+          secondary: 'var(--text-secondary)',
+          muted: 'var(--text-muted)',
+          'on-dark': 'var(--text-on-dark)',
         },
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-out forwards',
         'slide-up': 'slideUp 0.5s ease-out forwards',
-        'pulse-soft': 'pulseSoft 3s ease-in-out infinite',
-        'pulse-dot': 'pulseDot 1.4s ease-in-out infinite',
       },
       keyframes: {
         fadeIn: {
@@ -42,14 +42,6 @@ const config: Config = {
         slideUp: {
           '0%': { opacity: '0', transform: 'translateY(10px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-        pulseSoft: {
-          '0%, 100%': { opacity: '0.4' },
-          '50%': { opacity: '0.8' },
-        },
-        pulseDot: {
-          '0%, 60%, 100%': { transform: 'translateY(0)', opacity: '0.4' },
-          '30%': { transform: 'translateY(-6px)', opacity: '1' },
         },
       },
     },

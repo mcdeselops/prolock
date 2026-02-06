@@ -2,128 +2,112 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Font imports — matching portfolio typography */
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap');
+/* Fonts — matching actual Wix site typography
+   Interpro: Roboto display, Poppins body, Jost labels */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&family=Jost:wght@300;400;500&display=swap');
 
 :root {
-  --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-sans: 'DM Sans', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-display: 'Roboto', 'Helvetica Neue', sans-serif;
+  --font-body: 'Poppins', 'Avenir', 'Helvetica Neue', sans-serif;
+  --font-label: 'Jost', 'DIN Alternate', sans-serif;
 
-  /* Warm gray surface palette */
-  --surface: #F5F5F5;
-  --surface-secondary: #E5E5E5;
-  --surface-tertiary: #D4D4D4;
-  --ink: #252A38;
-  --ink-secondary: #464646;
-  --ink-tertiary: #7E7E7E;
-  --ink-muted: #A0A0A0;
+  /* Interpro theme — from evrlock-layout.jsx */
   --accent: #EE842F;
-  --accent-hover: #d9741e;
-  --accent-muted: rgba(238, 132, 47, 0.15);
-
-  /* Gradient colors for breathing effect */
-  --gradient-1: rgba(238, 132, 47, 0.06);
-  --gradient-2: rgba(238, 132, 47, 0.04);
-  --gradient-3: rgba(238, 132, 47, 0.02);
+  --accent-dark: #c96d1e;
+  --accent-dim: rgba(238, 132, 47, 0.08);
+  --accent-mid: rgba(238, 132, 47, 0.19);
+  --bg: #FFFFFF;
+  --bg-card: #F7F8FA;
+  --bg-input: #FFFFFF;
+  --bg-hero: #133446;
+  --border: #EEEEEE;
+  --text-primary: #171717;
+  --text-secondary: #5A6570;
+  --text-muted: #8694A5;
+  --text-on-dark: #FFFFFF;
+  --shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 2px 12px rgba(0, 0, 0, 0.12);
 }
 
 @layer base {
-  * {
-    border-color: #7E7E7E;
-  }
-
   body {
-    @apply bg-surface text-ink antialiased;
-    font-family: var(--font-sans);
-    background-color: var(--surface);
-    color: var(--ink);
+    background: var(--bg);
+    font-family: var(--font-body);
+    color: var(--text-primary);
+    min-height: 100vh;
     overflow-x: hidden;
-  }
-
-  h1, h2, h3, h4 {
-    font-family: var(--font-display);
-    @apply font-medium tracking-tight;
+    -webkit-font-smoothing: antialiased;
   }
 
   code, pre {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
   }
 }
 
-/* Breathing gradient background */
-.breathing-gradient {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background:
-    radial-gradient(ellipse 80% 50% at 20% 40%, var(--gradient-1), transparent),
-    radial-gradient(ellipse 60% 80% at 80% 20%, var(--gradient-2), transparent),
-    radial-gradient(ellipse 50% 60% at 50% 80%, var(--gradient-3), transparent);
-  background-size: 200% 200%;
-  animation: breathe 12s ease-in-out infinite;
+/* ─── Header ─── */
+.header-hero {
+  background: var(--bg-hero);
 }
 
-@keyframes breathe {
-  0%, 100% {
-    background-position: 0% 0%;
-    opacity: 0.6;
-  }
-  33% {
-    background-position: 100% 0%;
-    opacity: 0.8;
-  }
-  66% {
-    background-position: 50% 100%;
-    opacity: 0.7;
-  }
-}
-
-/* Chat container */
+/* ─── Chat container ─── */
 .chat-container {
-  @apply max-w-5xl mx-auto px-4 sm:px-6 lg:px-8;
+  @apply max-w-[800px] mx-auto px-6 sm:px-10;
 }
 
-/* User message bubble — warm gray, asymmetric rounding */
+/* ─── User message — pill on hero bg ─── */
 .message-user {
-  @apply bg-surface-tertiary rounded-2xl;
-  border-bottom-right-radius: 6px;
+  background: var(--bg-hero);
+  border-radius: 999px;
+  padding: 10px 20px;
+  color: var(--text-on-dark);
+  max-width: 400px;
 }
 
-/* Assistant message — transparent, text-only */
+/* ─── Assistant message — transparent, text-only ─── */
 .message-assistant {
-  @apply bg-transparent;
+  background: transparent;
 }
 
-/* Chat input — rounded card style on secondary surface */
+/* ─── Chat input — white pill with border ─── */
 .chat-input {
-  @apply w-full px-5 py-4
-         bg-surface-secondary
-         rounded-2xl
-         text-ink
-         placeholder:text-ink-muted
-         focus:outline-none focus:ring-2
-         transition-all duration-200;
-  border: 1px solid color-mix(in srgb, var(--ink-muted) 30%, transparent);
+  @apply w-full text-sm focus:outline-none transition-all duration-200;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-family: var(--font-body);
 }
 
-.chat-input:focus {
-  --tw-ring-color: color-mix(in srgb, var(--accent) 50%, transparent);
-  border-color: var(--accent);
+.chat-input::placeholder {
+  color: var(--text-muted);
 }
 
-/* Markdown prose styling */
+.chat-input-wrapper {
+  background: var(--bg);
+  border-radius: 999px;
+  padding: 10px 10px 10px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+/* ─── Markdown prose styling ─── */
 .prose-chat {
-  @apply text-ink leading-relaxed;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  font-family: var(--font-body);
+  letter-spacing: -0.01em;
 }
 
 .prose-chat p {
   @apply mb-4 last:mb-0;
+  font-size: 15px;
 }
 
 .prose-chat strong {
   @apply font-semibold;
-  color: var(--accent);
+  color: var(--text-primary);
 }
 
 .prose-chat em {
@@ -131,15 +115,22 @@
 }
 
 .prose-chat code {
-  @apply px-1.5 py-0.5 bg-surface-tertiary rounded text-sm font-mono;
+  @apply px-1.5 py-0.5 rounded text-sm;
+  font-family: var(--font-label);
+  background: var(--bg-card);
+  color: var(--bg-hero);
+  border: 1px solid var(--border);
 }
 
 .prose-chat pre {
-  @apply p-4 bg-surface-tertiary rounded-xl overflow-x-auto my-4;
+  @apply p-4 rounded-xl overflow-x-auto my-4;
+  background: var(--bg-hero);
+  color: #FFFFFF;
 }
 
 .prose-chat pre code {
-  @apply bg-transparent p-0;
+  @apply bg-transparent p-0 border-none;
+  color: #e2e8f0;
 }
 
 .prose-chat ul, .prose-chat ol {
@@ -156,33 +147,46 @@
 
 .prose-chat li {
   @apply mb-2;
+  font-size: 15px;
 }
 
 .prose-chat blockquote {
-  @apply pl-4 border-l-2 border-accent italic text-ink-secondary my-4;
+  @apply pl-4 border-l-2 italic my-4;
+  border-color: var(--accent);
+  color: var(--text-secondary);
 }
 
 .prose-chat a {
-  @apply text-accent hover:text-accent-hover underline underline-offset-2;
+  @apply underline underline-offset-2;
+  color: var(--accent);
+}
+
+.prose-chat a:hover {
+  color: var(--accent-dark);
 }
 
 .prose-chat h1, .prose-chat h2, .prose-chat h3 {
-  @apply font-display font-medium mt-6 mb-3;
+  @apply font-medium mt-6 mb-3;
+  font-family: var(--font-display);
+  letter-spacing: -0.03em;
 }
 
 .prose-chat h1 {
   @apply text-2xl;
+  color: var(--text-primary);
 }
 
 .prose-chat h2 {
-  @apply text-2xl text-accent;
+  @apply text-xl;
+  color: var(--bg-hero);
 }
 
 .prose-chat h3 {
   @apply text-lg;
+  color: var(--text-primary);
 }
 
-/* Tables in markdown */
+/* ─── Tables in markdown ─── */
 .prose-chat table {
   @apply w-full my-4 text-sm;
   border-collapse: collapse;
@@ -190,81 +194,95 @@
 
 .prose-chat th {
   @apply px-3 py-2 text-left font-semibold;
-  background: var(--surface-secondary);
-  color: var(--ink);
-  border-bottom: 1px solid var(--surface-tertiary);
+  background: var(--bg-hero);
+  color: white;
+  border-bottom: 1px solid var(--border);
 }
 
 .prose-chat td {
   @apply px-3 py-2;
-  color: var(--ink-secondary);
-  border-bottom: 1px solid color-mix(in srgb, var(--ink-muted) 20%, transparent);
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
 }
 
 .prose-chat tr:nth-child(even) td {
-  background: var(--surface-secondary);
+  background: var(--bg-card);
 }
 
-/* Suggestion buttons — portfolio flow-button style */
-.suggestion-btn {
-  @apply relative flex items-center gap-1 overflow-hidden
-         rounded-full border bg-transparent
-         px-5 py-3 text-sm font-medium cursor-pointer
-         transition-all duration-[600ms] ease-[cubic-bezier(0.23,1,0.32,1)]
-         hover:border-transparent hover:text-white hover:rounded-xl
-         active:scale-95;
-  border-color: color-mix(in srgb, var(--ink-muted) 40%, transparent);
-  color: var(--ink);
+/* ─── Suggested prompts — pill with border ─── */
+.suggestion-chip {
+  @apply text-sm cursor-pointer transition-all duration-200;
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 8px 18px;
 }
 
-/* View specs trigger button */
-.specs-trigger {
-  @apply rounded-full transition-all duration-200;
-  background: var(--surface-secondary);
-  border: 1px solid color-mix(in srgb, var(--ink-muted) 30%, transparent);
-}
-
-.specs-trigger:hover {
+.suggestion-chip:hover {
   border-color: var(--accent);
   color: var(--accent);
 }
 
-/* Bottom pane — surface card */
-.bottom-pane {
-  background: var(--surface);
-  border-top: 1px solid var(--surface-tertiary);
-  border-radius: 24px 24px 0 0;
-  box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.08);
+/* ─── References pill ─── */
+.reference-pill {
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  border-radius: 999px;
+  padding: 6px 16px;
+  cursor: pointer;
+  border: 1px solid var(--border);
 }
 
-/* Specs table styling */
-.specs-table {
-  border-collapse: collapse;
+.reference-pill:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
-.specs-table th {
-  @apply px-4 py-2.5 text-xs uppercase tracking-wider;
-  font-family: var(--font-mono);
-  color: var(--ink-tertiary);
-  background: var(--surface-secondary);
-  border-bottom: 1px solid var(--surface-tertiary);
+/* ─── Specs panel (gallery area) ─── */
+.specs-panel {
+  background: var(--bg-card);
 }
 
-.specs-table td {
-  @apply px-4 py-2.5 text-sm;
-  color: var(--ink-secondary);
-  border-bottom: 1px solid color-mix(in srgb, var(--ink-muted) 20%, transparent);
+.specs-card {
+  background: var(--bg);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow: var(--shadow);
 }
 
-.specs-table tbody tr:hover td {
-  background: var(--surface-secondary);
+.specs-card-header {
+  padding: 14px 20px;
+  background: var(--bg-hero);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-/* Sidebar — surface bg */
+.specs-data-cell {
+  padding: 8px 10px;
+  background: var(--bg-card);
+  border-radius: 8px;
+}
+
+/* ─── Sidebar ─── */
 .sidebar-glass {
-  background: var(--surface);
-  border-left: 1px solid var(--surface-tertiary);
-  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.08);
+  background: var(--bg);
+  border-left: 1px solid var(--border);
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-header {
+  padding: 20px 24px 14px;
+  background: var(--bg-hero);
 }
 
 .sidebar-edge-glow {
@@ -277,34 +295,33 @@
   width: 2px;
 }
 
-/* Sidebar document items */
 .sidebar-doc-item {
-  cursor: default;
+  cursor: pointer;
 }
 
 .sidebar-doc-item:hover {
-  background: var(--surface-secondary);
+  background: var(--bg-card);
 }
 
-/* Scrollbar styling */
+/* ─── Scrollbar ─── */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-transparent;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-stone-300 rounded-full;
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-stone-400;
+  background: rgba(0, 0, 0, 0.2);
 }
 
-/* Hide scrollbar utility */
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -314,17 +331,18 @@
   display: none;
 }
 
-/* Typing indicator dots */
+/* ─── Typing indicator ─── */
 .typing-dot {
-  @apply w-2 h-2 bg-ink-tertiary rounded-full;
-  animation: typing 1.4s ease-in-out infinite;
+  @apply w-2 h-2 rounded-full;
+  background: var(--text-muted);
+  animation: pulseDot 1.4s ease-in-out infinite;
 }
 
 .typing-dot:nth-child(1) { animation-delay: 0ms; }
 .typing-dot:nth-child(2) { animation-delay: 200ms; }
 .typing-dot:nth-child(3) { animation-delay: 400ms; }
 
-@keyframes typing {
+@keyframes pulseDot {
   0%, 60%, 100% {
     transform: translateY(0);
     opacity: 0.4;
@@ -335,34 +353,26 @@
   }
 }
 
-/* Streaming cursor */
+/* ─── Streaming cursor ─── */
 .streaming-cursor {
-  @apply inline-block w-2 h-5 bg-accent animate-pulse ml-0.5;
+  @apply inline-block w-2 h-5 animate-pulse ml-0.5;
+  background: var(--accent);
 }
 
-/* Focus visible styles */
-:focus-visible {
-  @apply outline-none ring-2 ring-offset-2;
-  --tw-ring-color: var(--accent);
-  --tw-ring-offset-color: var(--surface);
-}
-
-/* Selection */
+/* ─── Selection ─── */
 ::selection {
-  background: color-mix(in srgb, var(--accent) 20%, transparent);
-  color: var(--ink);
+  background: rgba(238, 132, 47, 0.2);
+  color: var(--text-primary);
 }
 
-/* Smooth scroll */
+/* ─── Smooth scroll ─── */
 html {
   scroll-behavior: smooth;
-  min-height: 100%;
-  overflow-x: hidden;
 }
 
-/* Mobile input zoom prevention */
+/* ─── Mobile ─── */
 @media (max-width: 640px) {
   .chat-input {
-    @apply text-base;
+    font-size: 16px;
   }
 }

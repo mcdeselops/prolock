@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'PROLock Configurator',
+  title: 'EVRlock Configurator — Interpro Steel & Pipe',
   description:
     'RAG-powered technical assistant for EVRlock OCTG connections by EVRAZ North America',
 }
@@ -19,9 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-screen">
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   )
 }
