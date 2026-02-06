@@ -26,6 +26,10 @@ const config: Config = {
           hover: 'var(--accent-hover)',
           muted: 'var(--accent-muted)',
         },
+        hero: {
+          DEFAULT: 'var(--hero)',
+          light: 'var(--hero-light)',
+        },
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-out forwards',
